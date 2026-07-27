@@ -22,6 +22,10 @@
   --mono:"IBM Plex Mono",ui-monospace,monospace;
   --r:20px; --rs:14px;
   --wrap:1180px;
+  --topbar-bg:linear-gradient(90deg,#0f2430 0%,#16323c 55%,#1b3e4f 100%);
+  --topbar-text:rgba(255,255,255,.94);
+  --topbar-muted:rgba(255,255,255,.76);
+  --topbar-border:rgba(255,255,255,.16);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -29,6 +33,12 @@ body{font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1
 a{color:inherit;text-decoration:none}
 img{max-width:100%;display:block}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+
+.site-topbar{background:linear-gradient(90deg,#0f2430 0%,#16323c 55%,#1b3e4f 100%);border-bottom:1px solid rgba(255,255,255,.16);color:var(--topbar-text);box-shadow:0 10px 30px -20px rgba(0,0,0,.35)}
+.site-topbar-inner{max-width:var(--wrap);margin:0 auto;padding:0 24px;min-height:40px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.site-topbar-link{display:inline-flex;align-items:center;gap:.55rem;padding:.24rem .5rem;border-radius:999px;transition:transform .2s ease,color .2s ease,background-color .2s ease,box-shadow .2s ease;color:var(--topbar-muted);font-size:.9rem;font-family:var(--body);font-weight:500;line-height:1.2;letter-spacing:.01em}
+.site-topbar-link:hover{color:#fff;background:rgba(255,255,255,.14);transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
+.site-topbar-link .icon{display:inline-grid;place-items:center;width:18px;height:18px;color:#fff;flex:none;opacity:.95}
 
 /* ============ TYPE ============ */
 h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
@@ -39,21 +49,27 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
 .section-subtitle{font-size:1.05rem;color:var(--ink-soft);max-width:56ch;margin-top:.9rem}
 
 /* ============ NAV ============ */
-.dental-nav{position:sticky;top:0;z-index:60;background:rgba(246,248,247,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
-.dental-nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px;max-width:var(--wrap);margin:0 auto;padding:0 24px}
-.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--disp);font-size:1.22rem;font-weight:600;letter-spacing:-.02em}
-.brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:.9rem;font-weight:500}
-.brand small{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;display:block;line-height:1}
-.nav-links{display:flex;align-items:center;gap:.35rem}
-.nav-links button{font-family:var(--body);font-size:.88rem;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:.5rem .55rem;border-radius:8px;transition:.2s;white-space:nowrap}
-.nav-links button:hover{color:var(--ink);background:var(--mint)}
-.nav-links button.active{color:var(--teal-deep);background:var(--mint);font-weight:500}
-.nav-cta{background:var(--coral)!important;color:#fff!important;font-weight:500;padding:.6rem 1.1rem!important;border-radius:999px!important}
-.nav-cta:hover{background:#e0543a!important;transform:translateY(-1px)}
-.back-hbs{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);border:1px solid var(--line);padding:.45rem .7rem;border-radius:999px}
-.back-hbs:hover{border-color:var(--teal);color:var(--teal)}
-.burger{display:none;background:none;border:1px solid var(--line);border-radius:10px;width:44px;height:40px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center}
-.burger span{width:18px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
+.dental-nav{position:sticky;top:0;z-index:60;background:rgba(246,248,247,.92);backdrop-filter:blur(16px);border-bottom:1px solid rgba(225,233,230,.95);box-shadow:0 10px 30px -18px rgba(22,50,60,.18)}
+.dental-nav-inner{display:flex;align-items:center;justify-content:space-between;height:78px;max-width:var(--wrap);margin:0 auto;padding:0 24px;gap:1rem}
+.brand{display:flex;align-items:center;gap:.7rem;font-family:var(--disp);font-size:1.22rem;font-weight:600;letter-spacing:-.02em;color:var(--ink);padding:.4rem .3rem;border-radius:999px;transition:transform .2s ease,color .2s ease;background:none;border:none;cursor:pointer}
+.brand:hover{color:var(--teal-deep);transform:translateY(-1px)}
+.brand-mark{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:.92rem;font-weight:500;box-shadow:0 12px 26px -16px rgba(15,89,77,.7)}
+.brand small{font-family:var(--mono);font-size:.62rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;display:block;line-height:1}
+.nav-home{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:none;border:1px solid rgba(225,233,230,.7);border-radius:10px;cursor:pointer;color:var(--teal-deep);transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;padding:.5rem .75rem;flex:none;font-family:var(--body);font-size:.9rem;font-weight:500;text-decoration:none}
+.nav-home:hover{color:var(--teal);background:rgba(31,122,109,.08);border-color:var(--teal);transform:translateY(-1px);box-shadow:0 8px 16px -12px rgba(22,50,60,.18)}
+.nav-links{display:flex;align-items:center;gap:.25rem;margin-left:auto}
+.nav-links button{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:.7rem .8rem;border-radius:999px;transition:color .2s ease,background-color .2s ease,transform .2s ease,box-shadow .2s ease;white-space:nowrap;position:relative}
+.nav-links button::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:.28rem;height:2px;border-radius:999px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .2s ease}
+.nav-links button:hover{color:var(--ink);background:rgba(31,122,109,.08);transform:translateY(-1px)}
+.nav-links button:hover::after,.nav-links button.active::after{transform:scaleX(1)}
+.nav-links button.active{color:var(--teal-deep);background:rgba(31,122,109,.1);font-weight:600;box-shadow:inset 0 0 0 1px rgba(31,122,109,.08)}
+.nav-cta{background:linear-gradient(135deg,var(--coral),#e0543a)!important;color:#fff!important;font-weight:600;padding:.72rem 1.15rem!important;border-radius:999px!important;box-shadow:0 16px 30px -16px rgba(240,101,74,.75)!important;transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}
+.nav-cta:hover{transform:translateY(-2px);box-shadow:0 20px 34px -16px rgba(240,101,74,.8)!important}
+.back-hbs{font-family:var(--mono);font-size:.69rem;letter-spacing:.06em;color:var(--ink-soft);border:1px solid var(--line);padding:.5rem .75rem;border-radius:999px;background:rgba(255,255,255,.7);transition:color .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease}
+.back-hbs:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-1px);box-shadow:0 8px 20px -12px rgba(22,50,60,.2)}
+.burger{display:none;background:rgba(255,255,255,.9);border:1px solid rgba(225,233,230,.95);border-radius:12px;width:46px;height:42px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center;box-shadow:0 10px 22px -16px rgba(22,50,60,.22);transition:transform .2s ease,box-shadow .2s ease,background .2s ease}
+.burger:hover{transform:translateY(-1px);box-shadow:0 14px 28px -16px rgba(22,50,60,.24)}
+.burger span{width:20px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
 .burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
 .burger.open span:nth-child(2){opacity:0}
 .burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
@@ -263,13 +279,14 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
 
 /* ============ RESPONSIVE ============ */
 @media(max-width:940px){
-  .nav-links,.back-hbs{display:none}
+  .nav-links,.back-hbs,.nav-home{display:none}
   .burger{display:flex}
-  .mobile-menu{display:block;position:fixed;inset:70px 0 auto 0;background:var(--surface);border-bottom:1px solid var(--line);padding:1rem 24px 1.4rem;transform:translateY(-120%);transition:.3s;z-index:55;box-shadow:var(--shadow)}
+  .mobile-menu{display:block;position:fixed;inset:78px 0 auto 0;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:1rem 16px 1.3rem;transform:translateY(-120%);transition:transform .3s ease,box-shadow .3s ease;z-index:55;box-shadow:0 12px 30px -16px rgba(14,76,72,.2)}
   .mobile-menu.open{transform:translateY(0)}
-  .mobile-menu button{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--body);font-size:1.05rem;padding:.85rem .4rem;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer}
-  .mobile-menu .mm-cta{background:var(--coral);color:#fff;border-radius:999px;text-align:center;margin-top:1rem;border:none;padding:.9rem}
-  .mobile-menu .mm-back{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);border-bottom:none}
+  .mobile-menu button{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--body);font-size:1rem;padding:.9rem .2rem;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer;transition:color .2s ease,padding-left .2s ease}
+  .mobile-menu button:hover{color:var(--teal-deep);padding-left:.3rem}
+  .mobile-menu .mm-cta{background:linear-gradient(135deg,var(--coral),#e0543a);color:#fff;border-radius:999px;text-align:center;margin-top:1rem;border:none;padding:.95rem 1rem;box-shadow:0 16px 28px -16px rgba(240,101,74,.8)}
+  .mobile-menu .mm-back{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);border-bottom:none;padding-top:1rem}
   .hero-grid{grid-template-columns:1fr;gap:2.5rem}
   .console{max-width:460px;margin:0 auto}
   .pain-grid,.dental-service-grid,.dental-process-timeline,.dental-outcome-grid{grid-template-columns:1fr 1fr}
@@ -286,6 +303,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
   .foot-grid{grid-template-columns:1fr 1fr}
   .hero-trust{gap:1.2rem}
   .contact-form{grid-template-columns:1fr}
+  .site-topbar-inner{justify-content:center;flex-wrap:wrap;min-height:auto;padding:.45rem 16px;gap:.35rem .75rem}
+  .site-topbar-link{font-size:.8rem;padding:.18rem .25rem}
 }
 @media(prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
@@ -319,6 +338,7 @@ const IC = {
   mail:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
   clock:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
   pin:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+  home:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
 };
 
 /* ---- reusable HTML builders ---- */
@@ -337,6 +357,8 @@ function img(theme, alt){
     verify: 'images/verification.webp',
     rcm:    'images/billing-dashboard.webp',
     team:   'images/support-team.webp',
+    callsupport: 'images/dental_call.jpg',
+    insurance : 'images/verification.jpg'
   };
   const src = files[theme] || files.office;
   return `<div class="split-media reveal">
@@ -578,7 +600,7 @@ function callPage(){
       <p class="section-subtitle">Recalls, reactivation, no-show recovery, treatment follow-up and balance reminders, made consistently and warmly so patients come back and cases move forward.</p>
       <ul>${li('Recall and reactivation campaigns')}${li('No-show and treatment plan follow-up')}${li('Patient balance and insurance information calls')}</ul>
     </div>
-    ${img('talk','Team member making a friendly outbound recall call to a dental patient')}
+    ${img('callsupport','Team member making a friendly outbound recall call to a dental patient')}
   </div></div></section>
 
   <section class="dental-section sand"><div class="wrap">
@@ -668,7 +690,7 @@ function verifyPage(){
       <p class="section-subtitle">We verify the details that actually determine what pays and what the patient owes, and document all of it in your system so your team can build accurate treatment plans.</p>
       <ul>${li('Eligibility, effective dates and coordination of benefits')}${li('Annual maximums, deductibles and remaining balances')}${li('Frequencies, waiting periods and downgrades')}${li('Pre-authorization and pre-determination support where needed')}</ul>
     </div>
-    ${img('verify','Dental insurance verification dashboard with a full benefit breakdown')}
+    ${img('insurance','Dental insurance verification dashboard with a full benefit breakdown')}
   </div></div></section>
 
   <section class="dental-section"><div class="wrap">
@@ -966,6 +988,18 @@ const NAV=[['dental','Dental Home'],['call-support','Call Support'],['insurance-
 
 function shell(){
   return `
+  <div class="site-topbar">
+    <div class="site-topbar-inner">
+      <a class="site-topbar-link" href="tel:+13213211740">
+        <span class="icon">${IC.phone}</span>
+        <span>+1 321 321-1740</span>
+      </a>
+      <a class="site-topbar-link" href="mailto:hello@hiredbillingsupport.com">
+        <span class="icon">${IC.mail}</span>
+        <span>hello@hiredbillingsupport.com</span>
+      </a>
+    </div>
+  </div>
   <nav class="dental-nav"><div class="dental-nav-inner">
     <button class="brand" data-go="dental" style="background:none;border:none;cursor:pointer">
       <span class="brand-mark">${IC.tooth}</span>
@@ -973,7 +1007,7 @@ function shell(){
     </button>
     <div class="nav-links">
       ${NAV.map(([k,l])=>`<button data-nav data-go="${k}">${l}</button>`).join('')}
-      <a class="back-hbs" href="https://www.hiredbillingsupport.com" target="_blank">↖ HBS Main</a>
+      <a class="nav-home" href="https://www.hiredbillingsupport.com" target="_blank" title="HBS Main" aria-label="HBS Main"><span>${IC.home}</span><span>HBS Main</span></a>
       <button class="nav-cta" data-go="book">Book a call</button>
     </div>
     <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>

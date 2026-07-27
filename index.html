@@ -37,8 +37,10 @@ img{max-width:100%;display:block}
 .site-topbar{background:linear-gradient(90deg,#0f2430 0%,#16323c 55%,#1b3e4f 100%);border-bottom:1px solid rgba(255,255,255,.16);max-width: none;color:var(--topbar-text);box-shadow:0 10px 30px -20px rgba(0,0,0,.35)}
 .site-topbar-inner{width: 100%;margin:0 auto;padding:0 24px;min-height:40px;display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .site-topbar-link{display:inline-flex;align-items:center;gap:.55rem;padding:.24rem .5rem;border-radius:10px;transition:transform .2s ease,color .2s ease,background-color .2s ease,box-shadow .2s ease;color:var(--topbar-muted);font-size:.9rem;font-family:var(--body);font-weight:500;line-height:1.2;letter-spacing:.01em}
-.site-topbar-link:hover{color:#fff;background:rgba(255,255,255,.14);transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)}
-.site-topbar-link .icon{display:inline-grid;place-items:center;width:18px;height:18px;color:#fff;flex:none;opacity:.95}
+/* .site-topbar-link:hover{color:#fff;background:rgba(255,255,255,.14);transform:translateY(-1px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.1)} */
+.site-topbar-link .icon{display:inline-grid;place-items:center;width:18px;height:18px;color:#fff;flex:none;opacity:.95;transition:transform .2s ease}
+.phone-link:hover .icon{animation:phone-ring .7s ease-in-out infinite;transform-origin:center}
+@keyframes phone-ring{0%,100%{transform:rotate(0deg) scale(1)}10%{transform:rotate(-8deg) scale(1.06)}20%{transform:rotate(8deg) scale(1.06)}30%{transform:rotate(-6deg) scale(1.04)}40%{transform:rotate(6deg) scale(1.04)}50%{transform:rotate(-3deg) scale(1.02)}60%{transform:rotate(3deg) scale(1.02)}}
 
 /* ============ TYPE ============ */
 h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
@@ -993,7 +995,7 @@ function shell(){
   return `
   <div class="site-topbar">
     <div class="site-topbar-inner">
-      <a class="site-topbar-link" href="tel:+13213211740">
+      <a class="site-topbar-link phone-link" href="tel:+13213211740">
         <span class="icon">${IC.phone}</span>
         <span>+1 321 321-1740</span>
       </a>

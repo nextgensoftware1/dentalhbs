@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>HBS Dental — Remote Dental Operations Support</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:#16323C; --ink-soft:#43585F;
+  --bg:#F6F8F7; --surface:#FFFFFF;
+  --teal:#1F7A6D; --teal-deep:#0E4C48;
+  --mint:#DCEFE9; --coral:#F0654A; --coral-soft:#FBE3DD;
+  --sand:#F3EDE4; --line:#E1E9E6;
+  --shadow:0 18px 50px -24px rgba(14,76,72,.28);
+  --shadow-sm:0 8px 24px -14px rgba(14,76,72,.30);
+  --disp:"Fraunces",Georgia,serif;
+  --body:"Instrument Sans",-apple-system,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --r:20px; --rs:14px;
+  --wrap:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
+
+/* ============ TYPE ============ */
+h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing:-.01em;color:var(--ink)}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);font-weight:500}
+.section-eyebrow{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:1rem}
+.section-eyebrow::before{content:"";width:26px;height:1px;background:var(--teal);opacity:.5}
+.section-title{font-size:clamp(1.7rem,3.6vw,2.7rem)}
+.section-subtitle{font-size:1.05rem;color:var(--ink-soft);max-width:56ch;margin-top:.9rem}
+
+/* ============ NAV ============ */
+.dental-nav{position:sticky;top:0;z-index:60;background:rgba(246,248,247,.82);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.dental-nav-inner{display:flex;align-items:center;justify-content:space-between;height:70px;max-width:var(--wrap);margin:0 auto;padding:0 24px}
+.brand{display:flex;align-items:center;gap:.6rem;font-family:var(--disp);font-size:1.22rem;font-weight:600;letter-spacing:-.02em}
+.brand-mark{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal-deep));display:grid;place-items:center;color:#fff;font-family:var(--mono);font-size:.9rem;font-weight:500}
+.brand small{font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:var(--teal);text-transform:uppercase;display:block;line-height:1}
+.nav-links{display:flex;align-items:center;gap:.35rem}
+.nav-links button{font-family:var(--body);font-size:.88rem;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:.5rem .55rem;border-radius:8px;transition:.2s;white-space:nowrap}
+.nav-links button:hover{color:var(--ink);background:var(--mint)}
+.nav-links button.active{color:var(--teal-deep);background:var(--mint);font-weight:500}
+.nav-cta{background:var(--coral)!important;color:#fff!important;font-weight:500;padding:.6rem 1.1rem!important;border-radius:999px!important}
+.nav-cta:hover{background:#e0543a!important;transform:translateY(-1px)}
+.back-hbs{font-family:var(--mono);font-size:.68rem;letter-spacing:.06em;color:var(--ink-soft);border:1px solid var(--line);padding:.45rem .7rem;border-radius:999px}
+.back-hbs:hover{border-color:var(--teal);color:var(--teal)}
+.burger{display:none;background:none;border:1px solid var(--line);border-radius:10px;width:44px;height:40px;cursor:pointer;flex-direction:column;gap:4px;align-items:center;justify-content:center}
+.burger span{width:18px;height:2px;background:var(--ink);border-radius:2px;transition:.25s}
+.burger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.open span:nth-child(2){opacity:0}
+.burger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mobile-menu{display:none}
+
+/* ============ BUTTONS ============ */
+.btn{display:inline-flex;align-items:center;gap:.5rem;font-family:var(--body);font-weight:500;font-size:.98rem;padding:.85rem 1.5rem;border-radius:999px;cursor:pointer;border:none;transition:.22s;white-space:nowrap}
+.btn-primary{background:var(--coral);color:#fff;box-shadow:0 12px 26px -14px rgba(240,101,74,.8)}
+.btn-primary:hover{background:#e0543a;transform:translateY(-2px)}
+.btn-ghost{background:transparent;color:var(--teal-deep);border:1.5px solid var(--teal);}
+.btn-ghost:hover{background:var(--teal);color:#fff}
+.btn-white{background:#fff;color:var(--teal-deep)}
+.btn-white:hover{transform:translateY(-2px)}
+.btn .arw{transition:.22s}
+.btn:hover .arw{transform:translateX(3px)}
+
+/* ============ HERO ============ */
+.dental-hero{position:relative;padding:clamp(2.5rem,6vw,5rem) 0 clamp(3rem,7vw,6rem);overflow:hidden}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(2rem,4vw,4rem);align-items:center}
+.dental-hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--mint);color:var(--teal-deep);font-family:var(--mono);font-size:.72rem;letter-spacing:.08em;padding:.45rem .9rem;border-radius:999px;text-transform:uppercase}
+.dental-hero-badge .dot{width:7px;height:7px;border-radius:50%;background:var(--coral);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.dental-hero-title{font-size:clamp(2.3rem,5.4vw,4rem);margin:1.3rem 0 1.1rem}
+.dental-hero-title em{font-style:italic;color:var(--teal)}
+.dental-hero-subtitle{font-size:clamp(1.02rem,1.6vw,1.18rem);color:var(--ink-soft);max-width:46ch}
+.dental-hero-actions{display:flex;gap:.9rem;flex-wrap:wrap;margin-top:1.9rem}
+.hero-trust{display:flex;gap:1.6rem;margin-top:2.2rem;flex-wrap:wrap}
+.hero-trust div{display:flex;flex-direction:column}
+.hero-trust b{font-family:var(--disp);font-size:1.5rem;color:var(--teal-deep)}
+.hero-trust span{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;color:var(--ink-soft);text-transform:uppercase}
+.hero-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;z-index:-1}
+.hero-blob.a{width:420px;height:420px;background:var(--mint);top:-120px;right:-80px}
+.hero-blob.b{width:300px;height:300px;background:var(--coral-soft);bottom:-100px;left:-60px;opacity:.6}
+
+/* ============ CONSOLE (signature) ============ */
+.console{background:var(--surface);border:1px solid var(--line);border-radius:24px;box-shadow:var(--shadow);padding:1.2rem;position:relative}
+.console-bar{display:flex;align-items:center;gap:.5rem;padding:.2rem .3rem .9rem}
+.console-bar .lights{display:flex;gap:.4rem}
+.console-bar .lights i{width:9px;height:9px;border-radius:50%;display:block}
+.console-bar .lights i:nth-child(1){background:#F0654A}
+.console-bar .lights i:nth-child(2){background:#F2C14E}
+.console-bar .lights i:nth-child(3){background:#5FBE9B}
+.console-bar b{font-family:var(--mono);font-size:.72rem;color:var(--ink-soft);letter-spacing:.04em;margin-left:auto}
+.console-row{display:grid;grid-template-columns:1fr 1fr;gap:.8rem}
+.mini{background:var(--bg);border:1px solid var(--line);border-radius:14px;padding:.9rem}
+.mini h5{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.7rem;font-weight:400}
+.queue-item{display:flex;align-items:center;gap:.6rem;font-size:.82rem;padding:.4rem 0;border-bottom:1px dashed var(--line)}
+.queue-item:last-child{border-bottom:none}
+.queue-item .av{width:24px;height:24px;border-radius:50%;background:var(--mint);color:var(--teal-deep);font-family:var(--mono);font-size:.62rem;display:grid;place-items:center;flex:none}
+.queue-item .st{margin-left:auto;font-family:var(--mono);font-size:.6rem;padding:.15rem .45rem;border-radius:6px}
+.st.live{background:var(--coral-soft);color:var(--coral)}
+.st.done{background:var(--mint);color:var(--teal)}
+.checklist li{display:flex;align-items:center;gap:.55rem;font-size:.82rem;padding:.32rem 0;color:var(--ink-soft)}
+.checklist .tick{width:18px;height:18px;border-radius:6px;border:1.5px solid var(--line);flex:none;display:grid;place-items:center;transition:.3s}
+.checklist li.on .tick{background:var(--teal);border-color:var(--teal)}
+.checklist li.on .tick svg{opacity:1}
+.checklist .tick svg{opacity:0;transition:.3s}
+.checklist li.on{color:var(--ink)}
+.bars{display:flex;align-items:flex-end;gap:.5rem;height:70px;margin-top:.3rem}
+.bars .bar{flex:1;background:linear-gradient(var(--teal),var(--mint));border-radius:6px 6px 0 0;transition:height 1s cubic-bezier(.2,.8,.2,1)}
+.ar-line{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.62rem;color:var(--ink-soft);margin-top:.5rem}
+.float{animation:float 6s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* ============ SECTIONS ============ */
+.dental-section{padding:clamp(3rem,7vw,6rem) 0}
+.dental-section.alt{background:var(--surface)}
+.dental-section.sand{background:var(--sand)}
+.center{text-align:center;margin:0 auto}
+.center .section-subtitle{margin-left:auto;margin-right:auto}
+
+/* pain grid */
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.6rem}
+.pain-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;position:relative;overflow:hidden}
+.pain-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;background:var(--coral);transform:scaleX(0);transform-origin:left;transition:.35s}
+.pain-card:hover::before{transform:scaleX(1)}
+.pain-card .pn{font-family:var(--mono);font-size:.7rem;color:var(--coral);letter-spacing:.1em}
+.pain-card h4{font-family:var(--disp);font-size:1.2rem;margin:.6rem 0 .5rem}
+.pain-card p{font-size:.92rem;color:var(--ink-soft)}
+
+/* services */
+.dental-service-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem;margin-top:2.6rem}
+.dental-service-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.7rem 1.5rem;transition:.3s}
+.dental-service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow);border-color:var(--mint)}
+.svc-ic{width:48px;height:48px;border-radius:13px;background:var(--mint);display:grid;place-items:center;color:var(--teal-deep);margin-bottom:1.1rem}
+.dental-service-card h4{font-family:var(--disp);font-size:1.25rem;margin-bottom:.5rem}
+.dental-service-card p{font-size:.93rem;color:var(--ink-soft)}
+
+/* split image section */
+.split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(2rem,4vw,3.5rem);align-items:center}
+.split.rev .split-media{order:-1}
+.split-media{border-radius:24px;overflow:hidden;position:relative;box-shadow:var(--shadow);aspect-ratio:4/3;background:var(--mint)}
+.split-media img{width:100%;height:100%;object-fit:cover}
+.split ul{list-style:none;margin-top:1.5rem;display:grid;gap:.9rem}
+.split ul li{display:flex;gap:.7rem;font-size:.98rem;color:var(--ink-soft)}
+.split ul li .chk{width:22px;height:22px;border-radius:50%;background:var(--mint);color:var(--teal);flex:none;display:grid;place-items:center;margin-top:2px}
+
+/* workflow timeline */
+.dental-process-timeline{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-top:3rem;position:relative}
+.dental-process-step{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.5rem}
+.dental-process-step .num{font-family:var(--mono);font-size:.8rem;color:#fff;background:var(--teal);width:34px;height:34px;border-radius:10px;display:grid;place-items:center;margin-bottom:1rem}
+.dental-process-step h4{font-family:var(--disp);font-size:1.12rem;margin-bottom:.4rem}
+.dental-process-step p{font-size:.88rem;color:var(--ink-soft)}
+
+/* AI human */
+.ai-human-section .ai-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem;margin-top:2.6rem}
+.ai-col{border-radius:var(--r);padding:2rem;border:1px solid var(--line)}
+.ai-col.ai{background:linear-gradient(160deg,var(--mint),#fff)}
+.ai-col.human{background:linear-gradient(160deg,var(--coral-soft),#fff)}
+.ai-col h3{font-size:1.5rem;margin-bottom:.4rem}
+.ai-col .tag{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.ai-col ul{list-style:none;margin-top:1.2rem;display:grid;gap:.7rem}
+.ai-col li{font-size:.94rem;color:var(--ink-soft);display:flex;gap:.6rem}
+.ai-col li::before{content:"—";color:var(--teal)}
+
+/* outcomes / stats */
+.dental-outcome-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-top:2.6rem}
+.dental-outcome-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.7rem;text-align:center}
+.dental-outcome-card b{font-family:var(--disp);font-size:2.6rem;color:var(--teal-deep);display:block;line-height:1}
+.dental-outcome-card span{font-size:.9rem;color:var(--ink-soft);display:block;margin-top:.6rem}
+
+/* comparison */
+.dental-comparison-section .cmp{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-top:2.4rem;border-radius:var(--r);overflow:hidden;border:1px solid var(--line)}
+.cmp-col{padding:2rem}
+.cmp-col.before{background:var(--sand)}
+.cmp-col.after{background:linear-gradient(160deg,var(--teal-deep),var(--teal));color:#fff}
+.cmp-col h4{color:inherit;font-size:1.3rem;margin-bottom:1.2rem;font-family:var(--disp)}
+.cmp-col.after h4{color:#fff}
+.cmp-col ul{list-style:none;display:grid;gap:.8rem}
+.cmp-col li{font-size:.94rem;display:flex;gap:.6rem}
+.cmp-col.before li{color:var(--ink-soft)}
+.cmp-col.after li{color:rgba(255,255,255,.92)}
+.cmp-col li .mk{flex:none}
+
+/* banner */
+.dental-banner{border-radius:26px;overflow:hidden;position:relative;padding:clamp(2.5rem,5vw,4rem);color:#fff;background:linear-gradient(120deg,var(--teal-deep),var(--teal))}
+.dental-banner::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 80% 20%,rgba(240,101,74,.4),transparent 45%);pointer-events:none}
+.dental-banner .bnr-in{position:relative;max-width:60ch}
+.dental-banner h3{color:#fff;font-size:clamp(1.6rem,3.4vw,2.5rem);margin-bottom:.9rem}
+.dental-banner p{color:rgba(255,255,255,.88);font-size:1.05rem;margin-bottom:1.6rem}
+
+/* faq */
+.faq-section .faq-wrap{max-width:820px;margin:2.4rem auto 0}
+.faq-item{background:var(--surface);border:1px solid var(--line);border-radius:var(--rs);margin-bottom:.8rem;overflow:hidden}
+.faq-q{width:100%;text-align:left;background:none;border:none;cursor:pointer;padding:1.2rem 1.4rem;display:flex;justify-content:space-between;gap:1rem;align-items:center;font-family:var(--disp);font-size:1.08rem;color:var(--ink)}
+.faq-q .pm{font-family:var(--mono);color:var(--teal);transition:.3s;flex:none}
+.faq-item.open .faq-q .pm{transform:rotate(45deg)}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease;padding:0 1.4rem}
+.faq-item.open .faq-a{max-height:300px;padding-bottom:1.3rem}
+.faq-a p{font-size:.95rem;color:var(--ink-soft)}
+
+/* cta */
+.dental-cta-section{padding:clamp(3rem,6vw,5rem) 0}
+.dental-cta-banner{background:linear-gradient(135deg,var(--teal-deep),var(--teal));border-radius:28px;padding:clamp(2.5rem,5vw,4.5rem);text-align:center;color:#fff;position:relative;overflow:hidden}
+.dental-cta-banner::before{content:"";position:absolute;width:380px;height:380px;background:rgba(240,101,74,.35);border-radius:50%;filter:blur(80px);top:-140px;right:-80px}
+.dental-cta-banner .of{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--mint);position:relative}
+.dental-cta-title{color:#fff;font-size:clamp(1.8rem,4vw,3rem);margin:.9rem 0 1rem;position:relative}
+.dental-cta-text{color:rgba(255,255,255,.9);max-width:52ch;margin:0 auto 1.9rem;position:relative}
+.dental-cta-actions{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;position:relative}
+
+/* footer */
+.dental-footer{background:var(--ink);color:rgba(255,255,255,.7);padding:3.5rem 0 2rem}
+.foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:2rem}
+.dental-footer h5{color:#fff;font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;margin-bottom:1.1rem}
+.dental-footer a,.dental-footer button{display:block;color:rgba(255,255,255,.7);background:none;border:none;font-family:var(--body);font-size:.92rem;padding:.3rem 0;cursor:pointer;text-align:left}
+.dental-footer a:hover,.dental-footer button:hover{color:#fff}
+.foot-brand p{font-size:.92rem;margin-top:1rem;max-width:34ch}
+.foot-bottom{border-top:1px solid rgba(255,255,255,.12);margin-top:2.5rem;padding-top:1.5rem;display:flex;justify-content:space-between;flex-wrap:wrap;gap:1rem;font-size:.82rem;font-family:var(--mono)}
+
+/* reveal animation */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.reveal.in{opacity:1;transform:none}
+.reveal.d1{transition-delay:.08s}.reveal.d2{transition-delay:.16s}.reveal.d3{transition-delay:.24s}.reveal.d4{transition-delay:.32s}
+
+/* sticky mobile cta */
+.sticky-cta{display:none}
+
+/* ============ CONTACT ============ */
+.contact-layout{display:grid;grid-template-columns:1.4fr .85fr;gap:1.6rem;align-items:start}
+.contact-form{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+.contact-form .field{display:flex;flex-direction:column;gap:.4rem}
+.contact-form .field-full{grid-column:1/-1}
+.contact-form label{font-family:var(--mono);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft)}
+.contact-form input,.contact-form select,.contact-form textarea{padding:.8rem 1rem;border:1px solid var(--line);border-radius:12px;font-family:var(--body);font-size:.95rem;background:var(--bg);color:var(--ink);width:100%}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:2px solid var(--teal);outline-offset:1px;background:#fff}
+.contact-form textarea{min-height:120px;resize:vertical}
+.contact-side{display:grid;gap:1.2rem}
+.info-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;box-shadow:var(--shadow-sm)}
+.info-row{display:flex;align-items:center;gap:.9rem;padding:.7rem 0;border-bottom:1px solid var(--line)}
+.info-row:last-of-type{border-bottom:none}
+.info-ic{width:40px;height:40px;border-radius:11px;background:var(--mint);color:var(--teal-deep);display:grid;place-items:center;flex:none}
+.info-row span small{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:.15rem}
+.info-row span{font-size:.95rem;color:var(--ink)}
+.info-stats{display:flex;justify-content:space-between;gap:.5rem;margin:1.3rem 0;padding:1.1rem 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.info-stats div{text-align:center}
+.info-stats b{font-family:var(--disp);font-size:1.5rem;color:var(--teal-deep);display:block;line-height:1}
+.info-stats span{font-family:var(--mono);font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+.hipaa{background:var(--mint);border-radius:12px;padding:.9rem 1rem}
+.hipaa p{font-size:.85rem;color:var(--teal-deep);margin-top:.35rem}
+.hours{display:flex;justify-content:space-between;align-items:center;padding:.6rem 0;border-bottom:1px dashed var(--line);font-size:.94rem;color:var(--ink-soft)}
+.hours:last-child{border-bottom:none}
+.hours b{color:var(--ink);font-weight:500}
+
+.page{display:none}
+.page.active{display:block;animation:fadein .5s ease}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:940px){
+  .nav-links,.back-hbs{display:none}
+  .burger{display:flex}
+  .mobile-menu{display:block;position:fixed;inset:70px 0 auto 0;background:var(--surface);border-bottom:1px solid var(--line);padding:1rem 24px 1.4rem;transform:translateY(-120%);transition:.3s;z-index:55;box-shadow:var(--shadow)}
+  .mobile-menu.open{transform:translateY(0)}
+  .mobile-menu button{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--body);font-size:1.05rem;padding:.85rem .4rem;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer}
+  .mobile-menu .mm-cta{background:var(--coral);color:#fff;border-radius:999px;text-align:center;margin-top:1rem;border:none;padding:.9rem}
+  .mobile-menu .mm-back{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);border-bottom:none}
+  .hero-grid{grid-template-columns:1fr;gap:2.5rem}
+  .console{max-width:460px;margin:0 auto}
+  .pain-grid,.dental-service-grid,.dental-process-timeline,.dental-outcome-grid{grid-template-columns:1fr 1fr}
+  .split,.ai-human-section .ai-cols,.dental-comparison-section .cmp,.contact-layout{grid-template-columns:1fr}
+  .split.rev .split-media{order:0}
+  .sticky-cta{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:50;background:var(--surface);border-top:1px solid var(--line);padding:.7rem 16px;gap:.7rem;box-shadow:0 -8px 24px -16px rgba(0,0,0,.3)}
+  .sticky-cta .btn{flex:1;justify-content:center;font-size:.9rem;padding:.8rem}
+  body{padding-bottom:70px}
+}
+@media(max-width:560px){
+  .pain-grid,.dental-service-grid,.dental-process-timeline,.dental-outcome-grid{grid-template-columns:1fr}
+  .console-row{grid-template-columns:1fr}
+  .dental-hero-actions .btn,.dental-cta-actions .btn{width:100%;justify-content:center}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .hero-trust{gap:1.2rem}
+  .contact-form{grid-template-columns:1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<!-- content injected below -->
+<div id="root"></div>
+<script src="/assets/js/contact.js"></script>
+<script>
+/* ============================================================
+   HBS DENTAL SUBSITE — render engine
+   Vanilla JS (mirrors the Next.js component structure below).
+   ============================================================ */
+
+/* ---- tiny icon set (inline SVG) ---- */
+const IC = {
+  arrow:'<svg class="arw" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+  check:'<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>',
+  phone:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3-8.7A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg>',
+  shield:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>',
+  chart:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="3" y1="21" x2="21" y2="21"/><rect x="5" y="11" width="3" height="7"/><rect x="10.5" y="6" width="3" height="12"/><rect x="16" y="14" width="3" height="4"/></svg>',
+  clip:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>',
+  chat:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 1 1 21 11.5z"/></svg>',
+  refresh:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="23 4 23 10 17 10"/><path d="M20.5 15a9 9 0 1 1-2.1-9.4L23 10"/></svg>',
+  cal:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+  tooth:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3c-2.2 0-3.5 1.8-3.5 4 0 1.5.5 2.6.8 4 .4 1.8.3 4 .9 6.4.4 1.6.8 3.6 1.8 3.6 1.2 0 1-2.4 1.6-4 .3-.9.7-1.4 1.4-1.4s1.1.5 1.4 1.4c.6 1.6.4 4 1.6 4 1 0 1.4-2 1.8-3.6.6-2.4.5-4.6.9-6.4.3-1.4.8-2.5.8-4 0-2.2-1.3-4-3.5-4-1.6 0-2.4 1-3 1-.6 0-1.4-1-3-1z"/></svg>',
+  mark:'<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  mail:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
+  clock:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  pin:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>',
+};
+
+/* ---- reusable HTML builders ---- */
+const svcCard = (icon,t,d)=>`<div class="dental-service-card reveal"><div class="svc-ic">${icon}</div><h4>${t}</h4><p>${d}</p></div>`;
+const painCard = (n,t,d)=>`<div class="pain-card reveal"><span class="pn">${n}</span><h4>${t}</h4><p>${d}</p></div>`;
+const step = (n,t,d)=>`<div class="dental-process-step reveal"><div class="num">${n}</div><h4>${t}</h4><p>${d}</p></div>`;
+const outcome=(b,s)=>`<div class="dental-outcome-card reveal"><b>${b}</b><span>${s}</span></div>`;
+const li=(t)=>`<li><span class="chk">${IC.check}</span><span>${t}</span></li>`;
+
+/* ---- image placeholders (soft dental-toned SVG so it's self-contained) ---- */
+function img(theme, alt){
+  const files = {
+    office: 'images/dental-office.webp',
+    desk:   'images/front-desk.webp',
+    talk:   'images/Insurance verification.webp',
+    verify: 'images/verification.webp',
+    rcm:    'images/billing-dashboard.webp',
+    team:   'images/support-team.webp',
+  };
+  const src = files[theme] || files.office;
+  return `<div class="split-media reveal">
+    <img src="${src}" alt="${alt}" loading="lazy" style="width:100%;height:100%;object-fit:cover">
+  </div>`;
+}
+/* ================= SHARED SECTIONS ================= */
+function ctaSection(offer,title,text,btn){
+  return `<section class="dental-cta-section"><div class="wrap"><div class="dental-cta-banner reveal">
+    <span class="of">${offer}</span>
+    <h2 class="dental-cta-title">${title}</h2>
+    <p class="dental-cta-text">${text}</p>
+    <div class="dental-cta-actions">
+      <button class="btn btn-white" data-go="book">${btn} ${IC.arrow}</button>
+      <button class="btn btn-white" style="background:rgba(255,255,255,.14);color:#fff" data-go="dental">Explore dental services</button>
+    </div>
+  </div></div></section>`;
+}
+function faqSection(items){
+  return `<section class="dental-section faq-section"><div class="wrap">
+    <div class="center" style="max-width:640px"><div class="section-eyebrow" style="justify-content:center">Common questions</div>
+    <h2 class="section-title">Answers before you ask</h2></div>
+    <div class="faq-wrap">
+    ${items.map(([q,a])=>`<div class="faq-item"><button class="faq-q">${q}<span class="pm">+</span></button><div class="faq-a"><p>${a}</p></div></div>`).join('')}
+    </div></div></section>`;
+}
+function banner(h,p,btn){
+  return `<section class="dental-section"><div class="wrap"><div class="dental-banner reveal"><div class="bnr-in">
+    <h3>${h}</h3><p>${p}</p><button class="btn btn-white" data-go="book">${btn} ${IC.arrow}</button>
+  </div></div></div></section>`;
+}
+function aiHuman(){
+  return `<section class="dental-section alt ai-human-section"><div class="wrap">
+  <div class="center" style="max-width:640px"><div class="section-eyebrow" style="justify-content:center">The execution model</div>
+  <h2 class="section-title">AI keeps the work visible. People make the calls.</h2>
+  <p class="section-subtitle">We don't hand your patients to a bot. AI organizes the repetitive tracking so our team spends their time where judgment actually matters.</p></div>
+  <div class="ai-cols">
+    <div class="ai-col ai reveal"><span class="tag">AI supports</span><h3>The quiet groundwork</h3><ul>
+      <li>Follow-up reminders and recall queues</li><li>Claim and AR aging visibility</li>
+      <li>Verification checklists and status tracking</li><li>Daily reporting and queue organization</li>
+    </ul></div>
+    <div class="ai-col human reveal d1"><span class="tag">People handle</span><h3>Every real conversation</h3><ul>
+      <li>Patient calls, scheduling and reassurance</li><li>Insurance detail and benefit judgment</li>
+      <li>Claim follow-up and denial appeals</li><li>Treatment coordination and escalations</li>
+    </ul></div>
+  </div></div></section>`;
+}
+
+/* ================= PAGE: HOME ================= */
+function homePage(){
+  return `<div class="page" id="page-dental">
+  <section class="dental-hero"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="hero-grid">
+      <div class="dental-hero-content">
+        <span class="dental-hero-badge reveal"><span class="dot"></span>Remote dental operations · Powered by HBS</span>
+        <h1 class="dental-hero-title reveal d1">Your practice runs on what happens <em>after the patient calls.</em></h1>
+        <p class="dental-hero-subtitle reveal d2">Missed calls, slow verifications, unworked AR, treatment that never gets scheduled. HBS Dental works inside your software and workflow like an in-house team, so your front desk can breathe.</p>
+        <div class="dental-hero-actions reveal d3">
+          <button class="btn btn-primary" data-go="book">Book a dental support call ${IC.arrow}</button>
+          <button class="btn btn-ghost" data-go="call-support">See how it works</button>
+        </div>
+        <div class="hero-trust reveal d4">
+          <div><b>&lt;30s</b><span>Call pickup target</span></div>
+          <div><b>24hr</b><span>Verification turnaround</span></div>
+          <div><b>100%</b><span>Inside your systems</span></div>
+        </div>
+      </div>
+      <div class="dental-hero-visual"><div class="console float reveal d2">
+        <div class="console-bar"><span class="lights"><i></i><i></i><i></i></span><b>practice · live</b></div>
+        <div class="console-row">
+          <div class="mini"><h5>Call queue</h5>
+            <div class="queue-item"><span class="av">NP</span>New patient<span class="st live">live</span></div>
+            <div class="queue-item"><span class="av">RC</span>Recall<span class="st done">booked</span></div>
+            <div class="queue-item"><span class="av">TX</span>Tx follow-up<span class="st done">sent</span></div>
+          </div>
+          <div class="mini"><h5>Verification</h5>
+            <ul class="checklist" id="hc">
+              <li><span class="tick">${IC.check}</span>Eligibility</li>
+              <li><span class="tick">${IC.check}</span>Annual max</li>
+              <li><span class="tick">${IC.check}</span>Frequencies</li>
+              <li><span class="tick">${IC.check}</span>Waiting periods</li>
+            </ul>
+          </div>
+          <div class="mini" style="grid-column:1/-1"><h5>AR aging recovered</h5>
+            <div class="bars" id="hbars"><div class="bar" style="height:30%"></div><div class="bar" style="height:55%"></div><div class="bar" style="height:45%"></div><div class="bar" style="height:78%"></div><div class="bar" style="height:65%"></div><div class="bar" style="height:90%"></div></div>
+            <div class="ar-line"><span>0–30</span><span>31–60</span><span>61–90</span><span>90+</span><span>Recovered</span><span>Posted</span></div>
+          </div>
+        </div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">What breaks inside a dental day</div>
+    <h2 class="section-title" style="max-width:20ch">Your team isn't failing. They're carrying too much at once.</h2>
+    <p class="section-subtitle">The front desk is answering phones, checking benefits, calming patients, chasing claims, and still trying to keep the schedule full. Something always slips, and it's usually revenue.</p>
+    <div class="pain-grid">
+      ${painCard('01','The phone rings during checkout','A patient is standing at the desk, another line is ringing, and a new-patient call goes to voicemail that no one gets back to.')}
+      ${painCard('02','Benefits aren\'t ready in time','Treatment gets delayed because no one had time to verify coverage, and the patient leaves unsure what they owe.')}
+      ${painCard('03','Treatment sits unscheduled','A doctor presents a plan, the patient says "let me think," and without follow-up that production never reaches the schedule.')}
+      ${painCard('04','Claims age quietly','Nobody is failing on purpose, but claims slip past 30, 60, 90 days while the team keeps up with today.')}
+      ${painCard('05','Recall gaps open up','Hygiene columns have holes because reactivation calls are the first thing to fall off a busy day.')}
+      ${painCard('06','Collections trail production','The schedule looks strong, but what you actually collect depends on verification, claims, and follow-up nobody has time for.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section alt"><div class="wrap">
+    <div class="center" style="max-width:640px"><div class="section-eyebrow" style="justify-content:center">What we cover</div>
+    <h2 class="section-title">A full dental operations layer, not a call center</h2>
+    <p class="section-subtitle">One team that plugs into your practice management software and works your queues the way your best staff member would.</p></div>
+    <div class="dental-service-grid">
+      ${svcCard(IC.phone,'Inbound & outbound calls','New-patient calls answered live, recalls and reactivation handled, no-shows and balances followed up with care.')}
+      ${svcCard(IC.shield,'Insurance verification','Eligibility, benefits, maximums, frequencies and waiting periods checked and documented before the visit.')}
+      ${svcCard(IC.chart,'Dental RCM & billing','Claim submission, follow-up, denials, payment posting and AR worked until it is collected, not just tracked.')}
+      ${svcCard(IC.chat,'Patient communication','Reminders, benefit explanations and treatment follow-up in a voice that sounds like your practice.')}
+      ${svcCard(IC.refresh,'AR & claim follow-up','Aging buckets worked in order, underpayments flagged, appeals filed so money reaches the schedule.')}
+      ${svcCard(IC.clip,'Administrative support','Data entry, form follow-up, scheduling and daily queue support inside your existing SOPs.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section"><div class="wrap"><div class="split">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">Calls that convert</div>
+      <h2 class="section-title">Every call answered like it's the one that matters</h2>
+      <p class="section-subtitle">A missed call is rarely just a missed call. It can be a missed new patient, a delayed treatment, or revenue that never reaches your schedule. We pick up, document, and route so nothing lands in a voicemail no one hears.</p>
+      <ul>${li('Live new-patient answering with your scripts')}${li('Recall, reactivation and no-show follow-up')}${li('Every call logged and routed inside your system')}</ul>
+      <div style="margin-top:1.8rem"><button class="btn btn-ghost" data-go="call-support">Explore call support ${IC.arrow}</button></div>
+    </div>
+    ${img('talk','Front desk team member speaking warmly with a dental patient on the phone')}
+  </div></div></section>
+
+  <section class="dental-section sand"><div class="wrap"><div class="split rev">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">Benefits, ready on time</div>
+      <h2 class="section-title">Verification done before the patient sits down</h2>
+      <p class="section-subtitle">When benefits aren't clear, treatment stalls and patients get uneasy about cost. We verify eligibility, maximums, frequencies and waiting periods, and document it all where your team already looks.</p>
+      <ul>${li('Full breakdown documented in your PMS')}${li('PPO plans and frequency limits confirmed')}${li('Treatment-ready notes for same-day case acceptance')}</ul>
+      <div style="margin-top:1.8rem"><button class="btn btn-ghost" data-go="insurance-verification">Explore verification ${IC.arrow}</button></div>
+    </div>
+    ${img('verify','Insurance verification dashboard showing benefit checklist completed')}
+  </div></div></section>
+
+  ${banner('You don\'t need to hire more front desk staff to grow.','Adding chairs and marketing only helps if the operations behind them keep up. HBS gives you the capacity of an extra team without another hire, badge, or payroll line.','See what a dental workflow review finds')}
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The workflow</div>
+    <h2 class="section-title" style="max-width:22ch">We adapt to your practice, not the other way around</h2>
+    <div class="dental-process-timeline">
+      ${step('1','We learn your practice','Your software, scripts, SOPs, insurance mix and preferences, so we work the way you already do.')}
+      ${step('2','We plug into your systems','Secure access to your PMS and phones. We become part of the team, not an outside vendor emailing back.')}
+      ${step('3','We work your queues','Calls, verifications, claims and follow-up handled daily and documented where your team looks.')}
+      ${step('4','You see everything','Clear daily reporting on calls, verifications, AR and follow-up, so nothing hides.')}
+    </div>
+  </div></section>
+
+  ${aiHuman()}
+
+  <section class="dental-section"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">What changes</div>
+    <h2 class="section-title">The difference shows up in the schedule</h2></div>
+    <div class="dental-outcome-grid">
+      ${outcome('Fewer','missed new-patient calls')}
+      ${outcome('Faster','insurance verification turnaround')}
+      ${outcome('More','treatment reaching the schedule')}
+      ${outcome('Cleaner','AR and claim follow-up')}
+    </div>
+  </div></section>
+
+  ${faqSection([
+    ['Do you replace my front desk?','No. We work alongside your team, taking the overflow and behind-the-scenes work so your in-office staff can focus on the patients in front of them.'],
+    ['Do you work inside our software?','Yes. We operate inside your practice management system, phones and SOPs. We adapt to your workflow rather than asking you to change everything.'],
+    ['Is this a call center or a VA service?','Neither. We\'re an embedded dental operations team. The people working your account understand dental billing, insurance and patient communication.'],
+    ['How do patients experience it?','They hear a warm, informed voice that sounds like your practice. Most patients never realize the support is remote.'],
+    ['How do we start?','It begins with a free dental workflow review. We look at where calls, verification, AR and follow-up are slipping, and show you what a support layer would catch.'],
+  ])}
+
+  ${ctaSection('Free dental workflow review','Let\'s find where your revenue is slipping.','In one short call we\'ll map your calls, verification, AR and follow-up, and show you exactly where a support layer would pay for itself.','Book a dental support call')}
+  </div>`;
+}
+
+/* ================= PAGE: CALL SUPPORT ================= */
+function callPage(){
+  return `<div class="page" id="page-call-support">
+  <section class="dental-hero"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="hero-grid">
+      <div class="dental-hero-content">
+        <span class="dental-hero-badge reveal"><span class="dot"></span>Dental call support</span>
+        <h1 class="dental-hero-title reveal d1">A missed call is a missed patient <em>waiting to happen.</em></h1>
+        <p class="dental-hero-subtitle reveal d2">Inbound and outbound dental calls handled live, with your scripts, in your voice. New patients get answered, recalls get made, and follow-up actually happens.</p>
+        <div class="dental-hero-actions reveal d3">
+          <button class="btn btn-primary" data-go="book">Fix your call flow ${IC.arrow}</button>
+          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+        </div>
+        <div class="hero-trust reveal d4"><div><b>Live</b><span>Answering, not voicemail</span></div><div><b>Logged</b><span>Every call documented</span></div><div><b>Routed</b><span>To the right person</span></div></div>
+      </div>
+      <div class="dental-hero-visual"><div class="console float reveal d2">
+        <div class="console-bar"><span class="lights"><i></i><i></i><i></i></span><b>call queue · today</b></div>
+        <div class="mini"><h5>Live queue</h5>
+          <div class="queue-item"><span class="av">NP</span>New patient — implants<span class="st live">on call</span></div>
+          <div class="queue-item"><span class="av">RC</span>6-month recall<span class="st done">booked</span></div>
+          <div class="queue-item"><span class="av">NS</span>No-show follow-up<span class="st done">rescheduled</span></div>
+          <div class="queue-item"><span class="av">TX</span>Treatment follow-up<span class="st done">scheduled</span></div>
+          <div class="queue-item"><span class="av">BA</span>Balance reminder<span class="st done">paid</span></div>
+        </div>
+        <div class="mini" style="margin-top:.8rem"><h5>Today at a glance</h5>
+          <div class="ar-line" style="font-size:.72rem;margin-top:.2rem"><span>Answered<br><b style="color:var(--teal-deep)">100%</b></span><span>Booked<br><b style="color:var(--teal-deep)">18</b></span><span>Reactivated<br><b style="color:var(--teal-deep)">7</b></span></div>
+        </div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The cost of the ring you didn't catch</div>
+    <h2 class="section-title" style="max-width:22ch">Your phones are your front door. Right now some of it is unlocked.</h2>
+    <div class="pain-grid">
+      ${painCard('01','New patients go to voicemail','The highest-value call of the day comes in while the desk is with a patient, and the caller books somewhere that picked up.')}
+      ${painCard('02','Voicemails never get returned','Messages pile up during the rush and by end of day nobody has time to work back through them.')}
+      ${painCard('03','Recall columns run thin','Hygiene reactivation is the first task to fall off a busy day, and the schedule quietly loosens.')}
+      ${painCard('04','No-shows just disappear','Without a follow-up call, a no-show becomes a lost patient instead of a rescheduled visit.')}
+      ${painCard('05','Treatment goes cold','"Let me think about it" needs a warm follow-up call, not silence, or the case never comes back.')}
+      ${painCard('06','Balances feel awkward to chase','Patient balance calls get put off because they feel uncomfortable, so collections drift.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section alt"><div class="wrap"><div class="split">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">Inbound</div>
+      <h2 class="section-title">Every call answered like a new patient is on the line</h2>
+      <p class="section-subtitle">Because often they are. We answer live using your scripts, capture the details your team needs, book straight into your schedule, and route anything clinical to the right person.</p>
+      <ul>${li('New and existing patient calls answered live')}${li('Scheduling directly in your system')}${li('Clinical questions routed to your team, not guessed at')}</ul>
+    </div>
+    ${img('desk','Dental front desk team member answering calls at a modern reception')}
+  </div></div></section>
+
+  <section class="dental-section"><div class="wrap"><div class="split rev">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">Outbound</div>
+      <h2 class="section-title">The follow-up calls that quietly fill the schedule</h2>
+      <p class="section-subtitle">Recalls, reactivation, no-show recovery, treatment follow-up and balance reminders, made consistently and warmly so patients come back and cases move forward.</p>
+      <ul>${li('Recall and reactivation campaigns')}${li('No-show and treatment plan follow-up')}${li('Patient balance and insurance information calls')}</ul>
+    </div>
+    ${img('talk','Team member making a friendly outbound recall call to a dental patient')}
+  </div></div></section>
+
+  <section class="dental-section sand"><div class="wrap">
+    <div class="section-eyebrow">How a call moves through us</div>
+    <h2 class="section-title">Answered, understood, documented, routed</h2>
+    <div class="dental-process-timeline">
+      ${step('1','Answered live','Picked up quickly in your practice\'s voice, using the scripts and tone you approve.')}
+      ${step('2','Captured','Patient details, reason for calling and next steps recorded accurately.')}
+      ${step('3','Actioned','Booked, rescheduled or followed up right in your practice management system.')}
+      ${step('4','Routed','Anything clinical or sensitive is handed to the right person on your team with full context.')}
+    </div>
+  </div></section>
+
+  ${banner('Hear what your patients hear.','We\'ll review a sample of your current call flow and show you exactly where new patients, recalls and follow-up are slipping through.','Get a free call flow review')}
+
+  <section class="dental-section"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">Outcomes</div>
+    <h2 class="section-title">What answering everything actually does</h2></div>
+    <div class="dental-outcome-grid">
+      ${outcome('More','new patients captured live')}
+      ${outcome('Fuller','hygiene and recall columns')}
+      ${outcome('Fewer','no-shows lost for good')}
+      ${outcome('Warmer','patient experience end to end')}
+    </div>
+  </div></section>
+
+  ${faqSection([
+    ['Will patients know it\'s not the front desk?','Rarely. We use your practice name, scripts and tone. The goal is a seamless experience that feels like your own team.'],
+    ['Can you book directly into our schedule?','Yes. We work inside your practice management software and book, reschedule and update just like in-house staff.'],
+    ['What happens with clinical questions?','We never guess on clinical matters. Those are routed to the right person on your team with full context captured.'],
+    ['Do you handle both inbound and outbound?','Yes. Inbound answering plus outbound recall, reactivation, no-show, treatment and balance follow-up.'],
+  ])}
+
+  ${ctaSection('Free front desk call flow review','Stop losing patients to voicemail.','We\'ll map how calls move through your practice today and show you where a live support layer would recover new patients and fill the schedule.','Fix your call flow')}
+  </div>`;
+}
+
+/* ================= PAGE: VERIFICATION ================= */
+function verifyPage(){
+  return `<div class="page" id="page-insurance-verification">
+  <section class="dental-hero"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="hero-grid">
+      <div class="dental-hero-content">
+        <span class="dental-hero-badge reveal"><span class="dot"></span>Dental insurance verification</span>
+        <h1 class="dental-hero-title reveal d1">Benefits <em>clear and ready</em> before the patient arrives.</h1>
+        <p class="dental-hero-subtitle reveal d2">Eligibility, maximums, frequencies and waiting periods verified and documented in your system, so treatment moves forward and patients know where they stand.</p>
+        <div class="dental-hero-actions reveal d3">
+          <button class="btn btn-primary" data-go="book">Improve verification ${IC.arrow}</button>
+          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+        </div>
+        <div class="hero-trust reveal d4"><div><b>24hr</b><span>Standard turnaround</span></div><div><b>Full</b><span>Benefit breakdowns</span></div><div><b>In-PMS</b><span>Documented where you look</span></div></div>
+      </div>
+      <div class="dental-hero-visual"><div class="console float reveal d2">
+        <div class="console-bar"><span class="lights"><i></i><i></i><i></i></span><b>verification · Mrs. Alvarez</b></div>
+        <div class="mini"><h5>Benefit checklist</h5>
+          <ul class="checklist" id="vc">
+            <li><span class="tick">${IC.check}</span>Eligibility active</li>
+            <li><span class="tick">${IC.check}</span>Annual maximum: $1,500</li>
+            <li><span class="tick">${IC.check}</span>Deductible: $50 met</li>
+            <li><span class="tick">${IC.check}</span>Cleaning frequency: 2/yr</li>
+            <li><span class="tick">${IC.check}</span>Waiting periods: none</li>
+            <li><span class="tick">${IC.check}</span>Major coverage: 50%</li>
+          </ul>
+        </div>
+        <div class="mini" style="margin-top:.8rem;text-align:center"><h5>Status</h5><b style="font-family:var(--disp);color:var(--teal-deep);font-size:1.3rem">Treatment-ready</b></div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">When coverage is a question mark</div>
+    <h2 class="section-title" style="max-width:22ch">Unclear benefits cost you twice: in trust and in collections.</h2>
+    <div class="pain-grid">
+      ${painCard('01','Verification runs late','Benefits get checked the morning of, or not at all, and the schedule fills with uncertainty.')}
+      ${painCard('02','Patients don\'t know their cost','Without a clear breakdown, patients hesitate on treatment and case acceptance drops.')}
+      ${painCard('03','PPO plans get confusing','Fee schedules, downgrades and limitations pile up until nobody\'s sure what will actually pay.')}
+      ${painCard('04','Claims come back for eligibility','Missed frequencies or waiting periods turn into denials and rework weeks later.')}
+      ${painCard('05','Treatment stalls at the desk','A patient ready to say yes leaves unsure, and momentum is lost.')}
+      ${painCard('06','Estimates are guesses','Front desk gives ballpark numbers that don\'t match the EOB, and the balance conversation gets awkward.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section alt"><div class="wrap"><div class="split">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">What we check</div>
+      <h2 class="section-title">A full breakdown, not a yes/no</h2>
+      <p class="section-subtitle">We verify the details that actually determine what pays and what the patient owes, and document all of it in your system so your team can build accurate treatment plans.</p>
+      <ul>${li('Eligibility, effective dates and coordination of benefits')}${li('Annual maximums, deductibles and remaining balances')}${li('Frequencies, waiting periods and downgrades')}${li('Pre-authorization and pre-determination support where needed')}</ul>
+    </div>
+    ${img('verify','Dental insurance verification dashboard with a full benefit breakdown')}
+  </div></div></section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The workflow</div>
+    <h2 class="section-title">From appointment booked to treatment-ready</h2>
+    <div class="dental-process-timeline">
+      ${step('1','We see the schedule','Upcoming and new-patient appointments flow into our verification queue automatically.')}
+      ${step('2','We verify the details','Eligibility, maximums, frequencies and limitations confirmed with the payer.')}
+      ${step('3','We document in your PMS','A clean, consistent breakdown lands where your team already looks, before the visit.')}
+      ${step('4','You present with confidence','Accurate estimates and clear coverage mean smoother case acceptance and fewer surprises.')}
+    </div>
+  </div></section>
+
+  ${banner('Get a free verification review.','Send us a slice of your upcoming schedule and we\'ll show you how much faster and cleaner verified benefits could reach your team.','Review your verification')}
+
+  <section class="dental-section sand"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">Outcomes</div>
+    <h2 class="section-title">Clear benefits change the whole day</h2></div>
+    <div class="dental-outcome-grid">
+      ${outcome('Higher','case acceptance')}
+      ${outcome('Fewer','eligibility denials')}
+      ${outcome('Faster','treatment scheduling')}
+      ${outcome('Clearer','patient cost conversations')}
+    </div>
+  </div></section>
+
+  ${faqSection([
+    ['How far ahead do you verify?','We typically verify ahead of the appointment so benefits are ready before the patient arrives, on a cadence that fits your schedule.'],
+    ['Do you document inside our system?','Yes. Breakdowns are entered in your practice management software in a consistent format your team can rely on.'],
+    ['Can you handle PPO complexity?','Yes. We confirm fee schedules, downgrades, frequencies and limitations so estimates hold up against the EOB.'],
+    ['Do you support pre-authorizations?','Where applicable, we support pre-authorization and pre-determination so claim-readiness is built in from the start.'],
+  ])}
+
+  ${ctaSection('Free dental insurance verification review','Make treatment easy to say yes to.','We\'ll review your current verification process and show you how ready-to-present benefits lift case acceptance and cut denials.','Improve verification')}
+  </div>`;
+}
+
+/* ================= PAGE: RCM / BILLING ================= */
+function rcmPage(){
+  return `<div class="page" id="page-rcm-billing">
+  <section class="dental-hero"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="hero-grid">
+      <div class="dental-hero-content">
+        <span class="dental-hero-badge reveal"><span class="dot"></span>Dental RCM & billing</span>
+        <h1 class="dental-hero-title reveal d1">Strong production means nothing until it's <em>collected.</em></h1>
+        <p class="dental-hero-subtitle reveal d2">Claims submitted clean, followed up relentlessly, denials appealed and AR worked in order, so the gap between what you produce and what you collect finally closes.</p>
+        <div class="dental-hero-actions reveal d3">
+          <button class="btn btn-primary" data-go="book">Fix your AR follow-up ${IC.arrow}</button>
+          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+        </div>
+        <div class="hero-trust reveal d4"><div><b>Worked</b><span>Not just tracked</span></div><div><b>Aging</b><span>By the bucket</span></div><div><b>Visible</b><span>Production vs collection</span></div></div>
+      </div>
+      <div class="dental-hero-visual"><div class="console float reveal d2">
+        <div class="console-bar"><span class="lights"><i></i><i></i><i></i></span><b>revenue cycle · this month</b></div>
+        <div class="mini"><h5>AR aging worked</h5>
+          <div class="bars" id="rbars"><div class="bar" style="height:85%"></div><div class="bar" style="height:60%"></div><div class="bar" style="height:38%"></div><div class="bar" style="height:22%"></div></div>
+          <div class="ar-line"><span>0–30</span><span>31–60</span><span>61–90</span><span>90+</span></div>
+        </div>
+        <div class="mini" style="margin-top:.8rem"><h5>Claim status</h5>
+          <div class="queue-item"><span class="av">SB</span>Submitted<span class="st done">42</span></div>
+          <div class="queue-item"><span class="av">FU</span>Followed up<span class="st live">work</span></div>
+          <div class="queue-item"><span class="av">DN</span>Denials appealed<span class="st done">6</span></div>
+        </div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The production–collection gap</div>
+    <h2 class="section-title" style="max-width:22ch">Looks great on the day sheet. Then reality catches up.</h2>
+    <div class="pain-grid">
+      ${painCard('01','Claims age untouched','Everyone keeps up with today, so claims quietly slide past 30, 60 and 90 days without follow-up.')}
+      ${painCard('02','Denials get set aside','A denial needs research and an appeal, and that\'s exactly the task a busy desk postpones.')}
+      ${painCard('03','Underpayments go unnoticed','Payers pay less than contracted and, without a review, the difference is simply lost.')}
+      ${painCard('04','Posting falls behind','Payments and adjustments pile up, and the numbers you\'re making decisions on aren\'t current.')}
+      ${painCard('05','Patient balances drift','Statements go out but follow-up doesn\'t, and patient AR keeps growing.')}
+      ${painCard('06','You can\'t see the gap','Production and collection live in different reports, so no one can point to where the money stalls.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section alt"><div class="wrap"><div class="split">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">How we work AR</div>
+      <h2 class="section-title">Aging worked in order, until it's collected</h2>
+      <p class="section-subtitle">We don\'t just report your aging, we work it. Every bucket gets attention, denials get appealed, underpayments get flagged, and patient balances get followed up with a steady, respectful cadence.</p>
+      <ul>${li('Clean claim submission and timely follow-up')}${li('Denial management and appeals')}${li('Underpayment and PPO adjustment review')}${li('Patient balance workflow that stays consistent')}</ul>
+    </div>
+    ${img('rcm','Dental billing and revenue cycle dashboard showing AR aging buckets')}
+  </div></div></section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The workflow</div>
+    <h2 class="section-title">Submit, follow up, resolve, report</h2>
+    <div class="dental-process-timeline">
+      ${step('1','Submit clean','Claims go out complete and coded correctly, so fewer come back in the first place.')}
+      ${step('2','Follow up on time','Aging is worked on schedule, not when someone finally gets a free afternoon.')}
+      ${step('3','Resolve the hard ones','Denials, underpayments and appeals handled with the persistence they need.')}
+      ${step('4','Report clearly','You see production against collection and exactly where dollars are moving.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section sand dental-comparison-section"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">Before & after</div>
+    <h2 class="section-title">What changes when AR is actually worked</h2></div>
+    <div class="cmp">
+      <div class="cmp-col before reveal"><h4>Without a support layer</h4><ul>
+        <li><span class="mk">${IC.mark}</span>Claims aging past 90 days with no owner</li>
+        <li><span class="mk">${IC.mark}</span>Denials stacked in a "deal with later" pile</li>
+        <li><span class="mk">${IC.mark}</span>Underpayments quietly absorbed</li>
+        <li><span class="mk">${IC.mark}</span>Collections trailing production month after month</li>
+      </ul></div>
+      <div class="cmp-col after reveal d1"><h4>With HBS Dental</h4><ul>
+        <li><span class="mk">${IC.check}</span>Every aging bucket worked on a schedule</li>
+        <li><span class="mk">${IC.check}</span>Denials researched and appealed promptly</li>
+        <li><span class="mk">${IC.check}</span>Underpayments flagged and pursued</li>
+        <li><span class="mk">${IC.check}</span>Collections tracking closer to production</li>
+      </ul></div>
+    </div>
+  </div></section>
+
+  ${banner('Get a free AR review.','Share your aging report and we\'ll show you where dollars are stuck and what a worked AR process would recover.','Review your dental AR')}
+
+  ${faqSection([
+    ['Do you just report AR or actually work it?','We work it. Reporting is the by-product. Our team follows up on claims, appeals denials and pursues balances until they resolve.'],
+    ['Can you handle denials and appeals?','Yes. Denial research, corrections and appeals are a core part of what we do, not an add-on.'],
+    ['Do you review underpayments?','Yes. We compare payments against contracted rates and flag and pursue underpayments and PPO adjustments.'],
+    ['Will we see production vs collection clearly?','Yes. You get clear reporting that puts production and collection side by side so the gap stops hiding.'],
+  ])}
+
+  ${ctaSection('Free dental RCM review','Close the gap between production and collection.','We\'ll review your aging and claims process and show you where a worked revenue cycle would recover real dollars.','Fix your AR follow-up')}
+  </div>`;
+}
+
+/* ================= PAGE: ADMIN ================= */
+function adminPage(){
+  return `<div class="page" id="page-admin-support">
+  <section class="dental-hero"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="hero-grid">
+      <div class="dental-hero-content">
+        <span class="dental-hero-badge reveal"><span class="dot"></span>Dental administrative support</span>
+        <h1 class="dental-hero-title reveal d1">Take the busywork off the desk so your team can <em>be present.</em></h1>
+        <p class="dental-hero-subtitle reveal d2">Data entry, scheduling, forms, document collection and daily queue support handled inside your software and SOPs, so your in-office team can focus on patients.</p>
+        <div class="dental-hero-actions reveal d3">
+          <button class="btn btn-primary" data-go="book">Strengthen your front desk ${IC.arrow}</button>
+          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+        </div>
+        <div class="hero-trust reveal d4"><div><b>Inside</b><span>Your SOPs</span></div><div><b>Daily</b><span>Queue support</span></div><div><b>Less</b><span>Front desk overload</span></div></div>
+      </div>
+      <div class="dental-hero-visual"><div class="console float reveal d2">
+        <div class="console-bar"><span class="lights"><i></i><i></i><i></i></span><b>admin board · today</b></div>
+        <div class="console-row">
+          <div class="mini"><h5>Task queue</h5>
+            <div class="queue-item"><span class="av">DE</span>Data entry<span class="st done">clear</span></div>
+            <div class="queue-item"><span class="av">FM</span>Forms<span class="st live">work</span></div>
+            <div class="queue-item"><span class="av">DC</span>Doc collection<span class="st done">done</span></div>
+          </div>
+          <div class="mini"><h5>Schedule support</h5>
+            <ul class="checklist" id="ac">
+              <li><span class="tick">${IC.check}</span>Confirmations sent</li>
+              <li><span class="tick">${IC.check}</span>Gaps flagged</li>
+              <li><span class="tick">${IC.check}</span>Recall filled</li>
+            </ul>
+          </div>
+        </div>
+      </div></div>
+    </div></div>
+  </section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">The invisible workload</div>
+    <h2 class="section-title" style="max-width:22ch">The tasks nobody sees are the ones burning your team out.</h2>
+    <div class="pain-grid">
+      ${painCard('01','Data entry piles up','Between patients there\'s never a clean block of time, so entry backs up and reports go stale.')}
+      ${painCard('02','Forms chase themselves','New-patient paperwork and consents need follow-up that keeps sliding down the list.')}
+      ${painCard('03','Documents go missing','Insurance cards, referrals and records need collecting, and gaps surface at the worst moment.')}
+      ${painCard('04','The schedule has holes','Gaps and openings need active management, not a glance when someone remembers.')}
+      ${painCard('05','Queues quietly grow','PMS task lists expand faster than a busy desk can work them down.')}
+      ${painCard('06','Staff burn out','Good people leave when every day is a scramble to stay above water.')}
+    </div>
+  </div></section>
+
+  <section class="dental-section alt"><div class="wrap"><div class="split">
+    <div class="split-copy reveal">
+      <div class="section-eyebrow">What we take on</div>
+      <h2 class="section-title">The steady, behind-the-scenes work, handled</h2>
+      <p class="section-subtitle">We work inside your practice management system and follow your SOPs, so the daily administrative load stays under control without adding a hire.</p>
+      <ul>${li('Patient data entry and record updates')}${li('Appointment coordination and schedule support')}${li('Form follow-up and insurance document collection')}${li('Treatment plan task support and daily queue work')}</ul>
+    </div>
+    ${img('office','Organized dental practice workflow and administrative operations')}
+  </div></div></section>
+
+  <section class="dental-section"><div class="wrap">
+    <div class="section-eyebrow">How we fit in</div>
+    <h2 class="section-title">Inside your software, following your SOPs</h2>
+    <div class="dental-process-timeline">
+      ${step('1','We learn your process','Your SOPs, templates and preferences become how we work, so output looks like your team\'s.')}
+      ${step('2','We take the queues','Data entry, forms, documents and scheduling tasks move to us, off your desk.')}
+      ${step('3','AI keeps it organized','Reminders, task lists and status tracking keep everything visible and nothing forgotten.')}
+      ${step('4','Your team stays present','With the busywork handled, your in-office staff focus on the patients in the chair.')}
+    </div>
+  </div></section>
+
+  ${aiHuman()}
+
+  ${banner('Give your front desk room to breathe.','A free front desk review shows exactly which recurring tasks are eating your team\'s time, and which we can lift off today.','Strengthen your front desk')}
+
+  <section class="dental-section sand"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">Outcomes</div>
+    <h2 class="section-title">A calmer desk, a steadier practice</h2></div>
+    <div class="dental-outcome-grid">
+      ${outcome('Lower','front desk overload')}
+      ${outcome('Cleaner','data and reporting')}
+      ${outcome('Fuller','managed schedule')}
+      ${outcome('Steadier','team retention')}
+    </div>
+  </div></section>
+
+  ${faqSection([
+    ['Do you work inside our practice software?','Yes. We operate inside your PMS and follow your existing SOPs so our work is consistent with your team\'s.'],
+    ['What admin tasks can you take on?','Data entry, scheduling support, form and document follow-up, treatment plan tasks and daily queue work, among others.'],
+    ['Is this replacing our staff?','No. We lift the recurring, behind-the-scenes load so your in-office team can focus on patients and higher-value work.'],
+    ['How do you keep quality consistent?','We follow your documented SOPs and templates, and AI keeps tasks tracked so nothing falls through.'],
+  ])}
+
+  ${ctaSection('Free front desk review','Let\'s take the busywork off your team.','We\'ll map the recurring administrative tasks weighing your desk down and show you what a support layer can lift immediately.','Strengthen your front desk')}
+  </div>`;
+}
+
+/* ================= PAGE: BOOK (with full contact fields) ================= */
+function bookPage(){
+  return `<div class="page" id="page-book">
+  <section class="dental-hero" style="padding-bottom:2rem"><div class="hero-blob a"></div><div class="hero-blob b"></div>
+    <div class="wrap"><div class="center" style="max-width:760px">
+      <span class="dental-hero-badge reveal" style="margin:0 auto"><span class="dot"></span>Book a dental support call</span>
+      <h1 class="dental-hero-title reveal d1" style="margin-bottom:1rem">Let's find where your practice is <em>leaking revenue.</em></h1>
+      <p class="dental-hero-subtitle reveal d2" style="margin:0 auto">One short, no-pressure call. Whether you're a single practice, a growing group, or a DSO, our dental specialists respond within one business day. Fill out the form and we'll walk through your calls, verification, AR and admin load.</p>
+    </div></div>
+  </section>
+
+  <section class="dental-section" style="padding-top:1rem"><div class="wrap">
+    <div class="contact-layout">
+      <!-- form -->
+      <div class="console reveal" style="padding:2rem">
+        <div class="section-eyebrow" style="margin-bottom:.4rem">Request your free review</div>
+        <h2 style="font-size:1.6rem;margin-bottom:.4rem">Book a dental support call</h2>
+        <p style="color:var(--ink-soft);font-size:.94rem;margin-bottom:1.5rem">Fill out the form and we'll get back to you within 24 hours.</p>
+        <form class="contact-form" data-contact-form="true" method="post">
+          <div class="field"><label>Full name*</label><input name="name" placeholder="e.g. Dr. Rivera" required></div>
+          <div class="field"><label>Email address*</label><input name="email" type="email" placeholder="e.g. hello@yourpractice.com" required></div>
+          <div class="field"><label>Phone number*</label><input name="phone" placeholder="e.g. +1 (321) 321-1740" required></div>
+          <div class="field"><label>Practice / group name</label><input name="practice" placeholder="e.g. Riverside Dental"></div>
+          <div class="field field-full"><label>I'm interested in*</label>
+            <select name="service" style="color:var(--ink-soft)"><option value="">Choose a dental service</option><option>Call support</option><option>Insurance verification</option><option>RCM & billing</option><option>Administrative support</option><option>All of it</option></select>
+          </div>
+          <div class="field field-full"><label>How can we help?*</label><textarea name="message" placeholder="Tell us a little about your practice and what's weighing on the front desk right now." required></textarea></div>
+          <div class="field-full" style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
+            <button type="submit" class="btn btn-primary">Book my dental support call ${IC.arrow}</button>
+            <span style="font-family:var(--mono);font-size:.72rem;color:var(--ink-soft)">— Response within 24 hrs</span>
+          </div>
+        </form>
+      </div>
+      <!-- info sidebar -->
+      <div class="contact-side">
+        <div class="info-card reveal d1">
+          <div class="section-eyebrow" style="margin-bottom:1.2rem">Contact information</div>
+          <a class="info-row" href="tel:+13213211740"><span class="info-ic">${IC.phone}</span><span><small>Phone</small>+1 (321) 321-1740</span></a>
+          <a class="info-row" href="mailto:hello@hiredbillingsupport.com"><span class="info-ic">${IC.mail}</span><span><small>Email</small>hello@hiredbillingsupport.com</span></a>
+          <div class="info-stats">
+            <div><b>500+</b><span>Practices</span></div>
+            <div><b>24hr</b><span>Response</span></div>
+            <div><b>98%</b><span>Satisfaction</span></div>
+          </div>
+          <div class="hipaa"><span class="section-eyebrow" style="margin:0">HIPAA compliant</span><p>All communications and data handling are fully HIPAA-compliant.</p></div>
+        </div>
+        <div class="info-card reveal d2">
+          <div class="section-eyebrow" style="margin-bottom:1.2rem">Business hours</div>
+          <div class="hours"><span>Monday – Friday</span><b>9:00 AM – 5:00 PM EST</b></div>
+          <div class="hours"><span>Saturday</span><b style="color:var(--coral)">Closed</b></div>
+          <div class="hours"><span>Sunday</span><b style="color:var(--coral)">Closed</b></div>
+        </div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="dental-section" style="padding-top:0"><div class="wrap">
+    <div class="center" style="max-width:600px"><div class="section-eyebrow" style="justify-content:center">Trusted by dental teams</div>
+    <h2 class="section-title">HIPAA-compliant · 24hr response · 500+ practices</h2>
+    <p class="section-subtitle">Part of Hired Billing Support, focused entirely on dental operations.</p></div>
+  </div></section>
+  </div>`;
+}
+
+/* ================= NAV + FOOTER + SHELL ================= */
+const NAV=[['dental','Dental Home'],['call-support','Call Support'],['insurance-verification','Insurance Verification'],['rcm-billing','RCM & Billing'],['admin-support','Admin Support']];
+
+function shell(){
+  return `
+  <nav class="dental-nav"><div class="dental-nav-inner">
+    <button class="brand" data-go="dental" style="background:none;border:none;cursor:pointer">
+      <span class="brand-mark">${IC.tooth}</span>
+      <span>HBS Dental<small>Hired Billing Support</small></span>
+    </button>
+    <div class="nav-links">
+      ${NAV.map(([k,l])=>`<button data-nav data-go="${k}">${l}</button>`).join('')}
+      <a class="back-hbs" href="https://www.hiredbillingsupport.com" target="_blank">↖ HBS Main</a>
+      <button class="nav-cta" data-go="book">Book a call</button>
+    </div>
+    <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div></nav>
+  <div class="mobile-menu" id="mm">
+    ${NAV.map(([k,l])=>`<button data-nav data-go="${k}">${l}</button>`).join('')}
+    <button class="mm-cta" data-go="book">Book a dental support call</button>
+    <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
+  </div>
+
+  <main>
+    ${homePage()}${callPage()}${verifyPage()}${rcmPage()}${adminPage()}${bookPage()}
+  </main>
+
+  <footer class="dental-footer"><div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <div class="brand" style="color:#fff"><span class="brand-mark">${IC.tooth}</span><span style="color:#fff">HBS Dental</span></div>
+        <p>An embedded dental operations partner. We work inside your software and workflow like an in-house team, so your practice can grow without another hire.</p>
+      </div>
+      <div><h5>Services</h5>
+        <button data-go="call-support">Call support</button>
+        <button data-go="insurance-verification">Insurance verification</button>
+        <button data-go="rcm-billing">RCM & billing</button>
+        <button data-go="admin-support">Admin support</button>
+      </div>
+      <div><h5>Who we help</h5>
+        <button data-go="dental">Dental practices</button>
+        <button data-go="dental">Dental groups & DSOs</button>
+        <button data-go="dental">Cosmetic & specialty</button>
+      </div>
+      <div><h5>Get started</h5>
+        <button data-go="book">Book a support call</button>
+        <button data-go="book">Contact us</button>
+        <a href="https://www.hiredbillingsupport.com" target="_blank">HBS main site ↗</a>
+      </div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 Hired Billing Support · HBS Dental</span><span>We adapt to your workflow, not the other way around.</span></div>
+  </div></footer>
+  <div class="sticky-cta"><button class="btn btn-ghost" data-go="dental">Services</button><button class="btn btn-primary" data-go="book">Book a call</button></div>
+  `;
+}
+
+/* ================= ROUTER + BEHAVIOR ================= */
+document.getElementById('root').innerHTML=shell();
+
+const pages={dental:'page-dental','call-support':'page-call-support','insurance-verification':'page-insurance-verification','rcm-billing':'page-rcm-billing','admin-support':'page-admin-support','book':'page-book'};
+let io;
+function observe(){
+  if(io)io.disconnect();
+  io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
+  document.querySelectorAll('.page.active .reveal').forEach(el=>io.observe(el));
+  // animated checklists + bars in active page
+  document.querySelectorAll('.page.active .checklist').forEach(list=>{
+    [...list.children].forEach((li,i)=>setTimeout(()=>li.classList.add('on'),400+i*260));
+  });
+}
+function go(key){
+  const id=pages[key]||pages.dental;
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.go===key));
+  document.getElementById('mm').classList.remove('open');
+  document.getElementById('burger').classList.remove('open');
+  window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
+  // reset reveals for the new page
+  document.querySelectorAll('#'+id+' .reveal').forEach(el=>el.classList.remove('in'));
+  document.querySelectorAll('#'+id+' .checklist li').forEach(li=>li.classList.remove('on'));
+  setTimeout(observe,40);
+}
+document.addEventListener('click',e=>{
+  const g=e.target.closest('[data-go]'); if(g){e.preventDefault();go(g.dataset.go);return;}
+  const f=e.target.closest('.faq-q'); if(f){f.parentElement.classList.toggle('open');return;}
+});
+document.getElementById('burger').addEventListener('click',()=>{
+  document.getElementById('mm').classList.toggle('open');
+  document.getElementById('burger').classList.toggle('open');
+});
+go('dental');
+
+</script>
+</body>
+</html>

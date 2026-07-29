@@ -1,0 +1,8 @@
+User-agent: *
+Disallow:
+
+# Sitemap
+Sitemap: https://dental.hiredbillingsupport.com/sitemap.xml
+
+# Crawl-delay can be added if needed (some crawlers ignore this)
+# Crawl-delay: 10

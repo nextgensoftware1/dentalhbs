@@ -8,6 +8,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- Favicons and PWA manifest -->
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1F7A6D">
 <style>
 /* ============ TOKENS ============ */
 :root{
@@ -1001,7 +1006,7 @@ function shell(){
         <span class="icon">${IC.phone}</span>
         <span>+1 321 321-1740</span>
       </a>
-      <a class="site-topbar-link" data-go="book" href="#" title="Book a call">
+      <a class="site-topbar-link" data-go="book" href="/contact" title="Book a call">
         <span class="icon">${IC.mail}</span>
         <span>hello@hiredbillingsupport.com</span>
       </a>
@@ -1023,13 +1028,13 @@ function shell(){
 
     <div class="nav-right">
       <a class="nav-home" href="https://www.hiredbillingsupport.com" target="_blank" title="HBS Main" aria-label="HBS Main"><span>${IC.home}</span><span>HBS Main</span></a>
-      <button class="nav-cta" data-go="book">Book a call</button>
+      <a class="nav-cta" data-go="book" href="/contact">Book a call</a>
       <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div></nav>
-  <div class="mobile-menu" id="mm">
+    <div class="mobile-menu" id="mm">
     ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
-    <button class="mm-cta" data-go="book">Book a dental support call</button>
+    <a class="mm-cta" data-go="book" href="/contact">Book a dental support call</a>
     <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
   </div>
 
@@ -1062,7 +1067,7 @@ function shell(){
     </div>
     <div class="foot-bottom"><span>© 2026 Hired Billing Support · HBS Dental</span></div>
   </div></footer>
-  <div class="sticky-cta"><button class="btn btn-ghost" data-go="dental">Services</button><button class="btn btn-primary" data-go="book">Book a call</button></div>
+  <div class="sticky-cta"><a class="btn btn-ghost" data-go="dental" href="/">Services</a><a class="btn btn-primary" data-go="book" href="/contact">Book a call</a></div>
   `;
 }
 

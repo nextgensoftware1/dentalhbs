@@ -1,6 +1,9 @@
 {
   "version": 2,
   "cleanUrls": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ],
   "functions": {
     "api/contact.js": {
       "runtime": "@vercel/node@2.0.0"

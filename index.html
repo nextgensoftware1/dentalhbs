@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="google-site-verification" content="-KfvcGQaWPa3VY7i83rcCBUx_ogHYgtOfugsaaaQpRA" />
 <title>HBS Dental — Remote Dental Operations Support</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,11 +64,11 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
 .nav-home{display:inline-flex;align-items:center;justify-content:center;gap:.4rem;background:none;border:1px solid rgba(225,233,230,.7);border-radius:10px;cursor:pointer;color:var(--teal-deep);transition:transform .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;padding:.5rem .75rem;flex:none;font-family:var(--body);font-size:.9rem;font-weight:500;text-decoration:none}
 .nav-home:hover{color:var(--teal);background:rgba(31,122,109,.08);border-color:var(--teal);transform:translateY(-1px);box-shadow:0 8px 16px -12px rgba(22,50,60,.18)}
 .nav-links{display:flex;align-items:center;gap:.25rem;margin-left:0}
-.nav-links button{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:.7rem .8rem;border-radius:10px;transition:color .2s ease,background-color .2s ease,transform .2s ease,box-shadow .2s ease;white-space:nowrap;position:relative}
-.nav-links button::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:.28rem;height:2px;border-radius:10px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .2s ease}
-.nav-links button:hover{color:var(--ink);background:rgba(31,122,109,.08);transform:translateY(-1px)}
-.nav-links button:hover::after,.nav-links button.active::after{transform:scaleX(1)}
-.nav-links button.active{color:var(--teal-deep);background:rgba(31,122,109,.1);font-weight:600;box-shadow:inset 0 0 0 1px rgba(31,122,109,.08)}
+.nav-links button,.nav-links a{font-family:var(--body);font-size:.92rem;color:var(--ink-soft);background:none;border:none;cursor:pointer;padding:.7rem .8rem;border-radius:10px;transition:color .2s ease,background-color .2s ease,transform .2s ease,box-shadow .2s ease;white-space:nowrap;position:relative;display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.nav-links button::after,.nav-links a::after{content:"";position:absolute;left:.8rem;right:.8rem;bottom:.28rem;height:2px;border-radius:10px;background:var(--teal);transform:scaleX(0);transform-origin:center;transition:transform .2s ease}
+.nav-links button:hover,.nav-links a:hover{color:var(--ink);background:rgba(31,122,109,.08);transform:translateY(-1px)}
+.nav-links button:hover::after,.nav-links a:hover::after,.nav-links button.active::after,.nav-links a.active::after{transform:scaleX(1)}
+.nav-links button.active,.nav-links a.active{color:var(--teal-deep);background:rgba(31,122,109,.1);font-weight:600;box-shadow:inset 0 0 0 1px rgba(31,122,109,.08)}
 .nav-cta{background:linear-gradient(135deg,var(--coral),#e0543a)!important;color:#fff!important;font-weight:600;padding:.72rem 1.15rem!important;border-radius:10px!important;box-shadow:0 16px 30px -16px rgba(240,101,74,.75)!important;transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}
 .nav-cta:hover{transform:translateY(-2px);box-shadow:0 20px 34px -16px rgba(240,101,74,.8)!important}
 .back-hbs{font-family:var(--mono);font-size:.69rem;letter-spacing:.06em;color:var(--ink-soft);border:1px solid var(--line);padding:.5rem .75rem;border-radius:10px;background:rgba(255,255,255,.7);transition:color .2s ease,border-color .2s ease,transform .2s ease,box-shadow .2s ease}
@@ -288,8 +289,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
   .burger{display:flex}
   .mobile-menu{display:block;position:fixed;inset:78px 0 auto 0;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:1rem 16px 1.3rem;transform:translateY(-120%);transition:transform .3s ease,box-shadow .3s ease;z-index:55;box-shadow:0 12px 30px -16px rgba(14,76,72,.2)}
   .mobile-menu.open{transform:translateY(0)}
-  .mobile-menu button{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--body);font-size:1rem;padding:.9rem .2rem;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer;transition:color .2s ease,padding-left .2s ease}
-  .mobile-menu button:hover{color:var(--teal-deep);padding-left:.3rem}
+  .mobile-menu button,.mobile-menu a{display:block;width:100%;text-align:left;background:none;border:none;font-family:var(--body);font-size:1rem;padding:.9rem .2rem;border-bottom:1px solid var(--line);color:var(--ink);cursor:pointer;transition:color .2s ease,padding-left .2s ease;text-decoration:none}
+  .mobile-menu button:hover,.mobile-menu a:hover{color:var(--teal-deep);padding-left:.3rem}
   .mobile-menu .mm-cta{background:linear-gradient(135deg,var(--coral),#e0543a);color:#fff;border-radius:10px;text-align:center;margin-top:1rem;border:none;padding:.95rem 1rem;box-shadow:0 16px 28px -16px rgba(240,101,74,.8)}
   .mobile-menu .mm-back{font-family:var(--mono);font-size:.78rem;color:var(--ink-soft);border-bottom:none;padding-top:1rem}
   .hero-grid{grid-template-columns:1fr;gap:2.5rem}
@@ -989,7 +990,8 @@ function bookPage(){
 }
 
 /* ================= NAV + FOOTER + SHELL ================= */
-const NAV=[['dental',' Home'],['call-support','Call Support'],['insurance-verification','Insurance Verification'],['rcm-billing','RCM & Billing'],['admin-support','Admin Support']];
+const NAV=[['dental','Home'],['call-support','Call Support'],['insurance-verification','Insurance Verification'],['rcm-billing','RCM & Billing'],['admin-support','Admin Support']];
+const routePath=(key)=>({dental:'/', 'call-support':'/call-support', 'insurance-verification':'/insurance-verification', 'rcm-billing':'/rcm-billing', 'admin-support':'/admin-support', book:'/contact'}[key]||'/');
 
 function shell(){
   return `
@@ -1015,7 +1017,7 @@ function shell(){
 
     <div class="nav-center">
       <div class="nav-links">
-        ${NAV.map(([k,l])=>`<button data-nav data-go="${k}">${l}</button>`).join('')}
+        ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
       </div>
     </div>
 
@@ -1026,7 +1028,7 @@ function shell(){
     </div>
   </div></nav>
   <div class="mobile-menu" id="mm">
-    ${NAV.map(([k,l])=>`<button data-nav data-go="${k}">${l}</button>`).join('')}
+    ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
     <button class="mm-cta" data-go="book">Book a dental support call</button>
     <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
   </div>
@@ -1068,25 +1070,35 @@ function shell(){
 document.getElementById('root').innerHTML=shell();
 
 const pages={dental:'page-dental','call-support':'page-call-support','insurance-verification':'page-insurance-verification','rcm-billing':'page-rcm-billing','admin-support':'page-admin-support','book':'page-book'};
+const routePages={'/':'dental','/call-support':'call-support','/insurance-verification':'insurance-verification','/rcm-billing':'rcm-billing','/admin-support':'admin-support','/contact':'book'};
 let io;
 function observe(){
   if(io)io.disconnect();
   io=new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')}),{threshold:.12});
   document.querySelectorAll('.page.active .reveal').forEach(el=>io.observe(el));
-  // animated checklists + bars in active page
   document.querySelectorAll('.page.active .checklist').forEach(list=>{
     [...list.children].forEach((li,i)=>setTimeout(()=>li.classList.add('on'),400+i*260));
   });
 }
-function go(key){
+function syncNav(key){
+  document.querySelectorAll('[data-nav-link]').forEach(link=>{
+    const href=link.getAttribute('href')||'/';
+    const isActive=href===routePath(key);
+    link.classList.toggle('active',isActive);
+  });
+}
+function go(key, updateHistory=true){
   const id=pages[key]||pages.dental;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.go===key));
+  syncNav(key);
   document.getElementById('mm').classList.remove('open');
   document.getElementById('burger').classList.remove('open');
+  if(updateHistory){
+    const path=routePath(key);
+    if(window.location.pathname!==path){window.history.pushState({},'',path);}
+  }
   window.scrollTo({top:0,behavior:'instant'in window?'instant':'auto'});
-  // reset reveals for the new page
   document.querySelectorAll('#'+id+' .reveal').forEach(el=>el.classList.remove('in'));
   document.querySelectorAll('#'+id+' .checklist li').forEach(li=>li.classList.remove('on'));
   setTimeout(observe,40);
@@ -1099,7 +1111,8 @@ document.getElementById('burger').addEventListener('click',()=>{
   document.getElementById('mm').classList.toggle('open');
   document.getElementById('burger').classList.toggle('open');
 });
-go('dental');
+window.addEventListener('popstate',()=>go(routePages[window.location.pathname]||'dental',false));
+go(routePages[window.location.pathname]||'dental',false);
 
 </script>
 </body>

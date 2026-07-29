@@ -37,6 +37,14 @@
 html{scroll-behavior:smooth}
 body{font-family:var(--body);color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 a{color:inherit;text-decoration:none}
+/* Ensure interactive SPA hooks show pointer */
+[data-go]{cursor:pointer}
+.site-topbar-link{cursor:pointer}
+/* Force pointer on children so icons/text inside anchors also show hand */
+[data-go], [data-go] * { cursor: pointer !important; }
+/* Ensure nav and topbar elements are on top and accept clicks */
+.site-topbar, .dental-nav { position: relative; z-index: 9999; }
+.nav-right a, .nav-right .nav-cta, .site-topbar-link, .brand { cursor: pointer !important; pointer-events: auto; z-index: 10000; }
 img{max-width:100%;display:block}
 .wrap{max-width:var(--wrap);margin:0 auto;padding:0 24px}
 
@@ -383,8 +391,8 @@ function ctaSection(offer,title,text,btn){
     <h2 class="dental-cta-title">${title}</h2>
     <p class="dental-cta-text">${text}</p>
     <div class="dental-cta-actions">
-      <button class="btn btn-white" data-go="book">${btn} ${IC.arrow}</button>
-      <button class="btn btn-white" style="background:rgba(255,255,255,.14);color:#fff" data-go="dental">Explore dental services</button>
+      <a class="btn btn-white" data-go="book" href="/contact">${btn} ${IC.arrow}</a>
+      <a class="btn btn-white" style="background:rgba(255,255,255,.14);color:#fff" data-go="dental" href="/">Explore dental services</a>
     </div>
   </div></div></section>`;
 }
@@ -398,7 +406,7 @@ function faqSection(items){
 }
 function banner(h,p,btn){
   return `<section class="dental-section"><div class="wrap"><div class="dental-banner reveal"><div class="bnr-in">
-    <h3>${h}</h3><p>${p}</p><button class="btn btn-white" data-go="book">${btn} ${IC.arrow}</button>
+    <h3>${h}</h3><p>${p}</p><a class="btn btn-white" data-go="book" href="/contact">${btn} ${IC.arrow}</a>
   </div></div></div></section>`;
 }
 function aiHuman(){
@@ -428,8 +436,8 @@ function homePage(){
         <h1 class="dental-hero-title reveal d1">Your practice runs on what happens <em>after the patient calls.</em></h1>
         <p class="dental-hero-subtitle reveal d2">Missed calls, slow verifications, unworked AR, treatment that never gets scheduled. HBS Dental works inside your software and workflow like an in-house team, so your front desk can breathe.</p>
         <div class="dental-hero-actions reveal d3">
-          <button class="btn btn-primary" data-go="book">Book a dental support call ${IC.arrow}</button>
-          <button class="btn btn-ghost" data-go="call-support">See how it works</button>
+          <a class="btn btn-primary" data-go="book" href="/contact">Book a dental support call ${IC.arrow}</a>
+          <a class="btn btn-ghost" data-go="call-support" href="/call-support">See how it works</a>
         </div>
         <div class="hero-trust reveal d4">
           <div><b>&lt;30s</b><span>Call pickup target</span></div>
@@ -496,7 +504,7 @@ function homePage(){
       <h2 class="section-title">Every call answered like it's the one that matters</h2>
       <p class="section-subtitle">A missed call is rarely just a missed call. It can be a missed new patient, a delayed treatment, or revenue that never reaches your schedule. We pick up, document, and route so nothing lands in a voicemail no one hears.</p>
       <ul>${li('Live new-patient answering with your scripts')}${li('Recall, reactivation and no-show follow-up')}${li('Every call logged and routed inside your system')}</ul>
-      <div style="margin-top:1.8rem"><button class="btn btn-ghost" data-go="call-support">Explore call support ${IC.arrow}</button></div>
+      <div style="margin-top:1.8rem"><a class="btn btn-ghost" data-go="call-support" href="/call-support">Explore call support ${IC.arrow}</a></div>
     </div>
     ${img('talk','Front desk team member speaking warmly with a dental patient on the phone')}
   </div></div></section>
@@ -507,7 +515,7 @@ function homePage(){
       <h2 class="section-title">Verification done before the patient sits down</h2>
       <p class="section-subtitle">When benefits aren't clear, treatment stalls and patients get uneasy about cost. We verify eligibility, maximums, frequencies and waiting periods, and document it all where your team already looks.</p>
       <ul>${li('Full breakdown documented in your PMS')}${li('PPO plans and frequency limits confirmed')}${li('Treatment-ready notes for same-day case acceptance')}</ul>
-      <div style="margin-top:1.8rem"><button class="btn btn-ghost" data-go="insurance-verification">Explore verification ${IC.arrow}</button></div>
+      <div style="margin-top:1.8rem"><a class="btn btn-ghost" data-go="insurance-verification" href="/insurance-verification">Explore verification ${IC.arrow}</a></div>
     </div>
     ${img('verify','Insurance verification dashboard showing benefit checklist completed')}
   </div></div></section>
@@ -560,8 +568,8 @@ function callPage(){
         <h1 class="dental-hero-title reveal d1">A missed call is a missed patient <em>waiting to happen.</em></h1>
         <p class="dental-hero-subtitle reveal d2">Inbound and outbound dental calls handled live, with your scripts, in your voice. New patients get answered, recalls get made, and follow-up actually happens.</p>
         <div class="dental-hero-actions reveal d3">
-          <button class="btn btn-primary" data-go="book">Fix your call flow ${IC.arrow}</button>
-          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+          <a class="btn btn-primary" data-go="book" href="/contact">Fix your call flow ${IC.arrow}</a>
+          <a class="btn btn-ghost" data-go="dental" href="/">Back to dental home</a>
         </div>
         <div class="hero-trust reveal d4"><div><b>Live</b><span>Answering, not voicemail</span></div><div><b>Logged</b><span>Every call documented</span></div><div><b>Routed</b><span>To the right person</span></div></div>
       </div>
@@ -659,8 +667,8 @@ function verifyPage(){
         <h1 class="dental-hero-title reveal d1">Benefits <em>clear and ready</em> before the patient arrives.</h1>
         <p class="dental-hero-subtitle reveal d2">Eligibility, maximums, frequencies and waiting periods verified and documented in your system, so treatment moves forward and patients know where they stand.</p>
         <div class="dental-hero-actions reveal d3">
-          <button class="btn btn-primary" data-go="book">Improve verification ${IC.arrow}</button>
-          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+          <a class="btn btn-primary" data-go="book" href="/contact">Improve verification ${IC.arrow}</a>
+          <a class="btn btn-ghost" data-go="dental" href="/">Back to dental home</a>
         </div>
         <div class="hero-trust reveal d4"><div><b>24hr</b><span>Standard turnaround</span></div><div><b>Full</b><span>Benefit breakdowns</span></div><div><b>In-PMS</b><span>Documented where you look</span></div></div>
       </div>
@@ -749,8 +757,8 @@ function rcmPage(){
         <h1 class="dental-hero-title reveal d1">Strong production means nothing until it's <em>collected.</em></h1>
         <p class="dental-hero-subtitle reveal d2">Claims submitted clean, followed up relentlessly, denials appealed and AR worked in order, so the gap between what you produce and what you collect finally closes.</p>
         <div class="dental-hero-actions reveal d3">
-          <button class="btn btn-primary" data-go="book">Fix your AR follow-up ${IC.arrow}</button>
-          <button class="btn btn-ghost" data-go="dental">Back to dental home</button>
+          <a class="btn btn-primary" data-go="book" href="/contact">Fix your AR follow-up ${IC.arrow}</a>
+          <a class="btn btn-ghost" data-go="dental" href="/">Back to dental home</a>
         </div>
         <div class="hero-trust reveal d4"><div><b>Worked</b><span>Not just tracked</span></div><div><b>Aging</b><span>By the bucket</span></div><div><b>Visible</b><span>Production vs collection</span></div></div>
       </div>
@@ -845,8 +853,8 @@ function adminPage(){
         <h1 class="dental-hero-title reveal d1">Take the busywork off the desk so your team can <em>be present.</em></h1>
         <p class="dental-hero-subtitle reveal d2">Data entry, scheduling, forms, document collection and daily queue support handled inside your software and SOPs, so your in-office team can focus on patients.</p>
         <div class="dental-hero-actions reveal d3">
-          <button class="btn btn-primary" data-go="book">Strengthen your front desk ${IC.arrow}</button>
-          <button class="btn btn-ghost" data-go="dental">Back to  home</button>
+          <a class="btn btn-primary" data-go="book" href="/contact">Strengthen your front desk ${IC.arrow}</a>
+          <a class="btn btn-ghost" data-go="dental" href="/">Back to  home</a>
         </div>
         <div class="hero-trust reveal d4"><div><b>Inside</b><span>Your SOPs</span></div><div><b>Daily</b><span>Queue support</span></div><div><b>Less</b><span>Front desk overload</span></div></div>
       </div>
@@ -1014,10 +1022,10 @@ function shell(){
   </div>
   <nav class="dental-nav"><div class="dental-nav-inner">
     <div class="nav-left">
-      <button class="brand" data-go="dental" style="background:none;border:none;cursor:pointer">
+      <a class="brand" data-go="dental" href="/" style="background:none;border:none;cursor:pointer">
         <span class="brand-mark">${IC.tooth}</span>
         <span>HBS Dental<small>Hired Billing Support</small></span>
-      </button>
+      </a>
     </div>
 
     <div class="nav-center">
@@ -1027,16 +1035,16 @@ function shell(){
     </div>
 
     <div class="nav-right">
-      <a class="nav-home" href="https://www.hiredbillingsupport.com" target="_blank" title="HBS Main" aria-label="HBS Main"><span>${IC.home}</span><span>HBS Main</span></a>
-      <a class="nav-cta" data-go="book" href="/contact">Book a call</a>
+      <a class="nav-home" href="https://www.hiredbillingsupport.com" target="_blank" rel="noopener noreferrer" title="HBS Main" aria-label="HBS Main"><span>${IC.home}</span><span>HBS Main</span></a>
+      <a class="nav-cta" data-go="book" href="/contact" role="button" aria-label="Book a call">Book a call</a>
       <button class="burger" id="burger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div></nav>
     <div class="mobile-menu" id="mm">
-    ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
-    <a class="mm-cta" data-go="book" href="/contact">Book a dental support call</a>
-    <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
-  </div>
+      ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
+      <a class="mm-cta" data-go="book" href="/contact">Book a dental support call</a>
+      <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
+    </div>
 
   <main>
     ${homePage()}${callPage()}${verifyPage()}${rcmPage()}${adminPage()}${bookPage()}
@@ -1049,19 +1057,19 @@ function shell(){
         <p>An embedded dental operations partner. We work inside your software and workflow like an in-house team, so your practice can grow without another hire.</p>
       </div>
       <div><h5>Services</h5>
-        <button data-go="call-support">Call support</button>
-        <button data-go="insurance-verification">Insurance verification</button>
-        <button data-go="rcm-billing">RCM & billing</button>
-        <button data-go="admin-support">Admin support</button>
+        <a data-go="call-support" href="/call-support">Call support</a>
+        <a data-go="insurance-verification" href="/insurance-verification">Insurance verification</a>
+        <a data-go="rcm-billing" href="/rcm-billing">RCM & billing</a>
+        <a data-go="admin-support" href="/admin-support">Admin support</a>
       </div>
       <div><h5>Who we help</h5>
-        <button data-go="dental">Dental practices</button>
-        <button data-go="dental">Dental groups & DSOs</button>
-        <button data-go="dental">Cosmetic & specialty</button>
+        <a data-go="dental" href="/">Dental practices</a>
+        <a data-go="dental" href="/">Dental groups & DSOs</a>
+        <a data-go="dental" href="/">Cosmetic & specialty</a>
       </div>
       <div><h5>Get started</h5>
-        <button data-go="book">Book a support call</button>
-        <button data-go="book">Contact us</button>
+        <a data-go="book" href="/contact">Book a support call</a>
+        <a data-go="book" href="/contact">Contact us</a>
         <a href="https://www.hiredbillingsupport.com" target="_blank">HBS main site ↗</a>
       </div>
     </div>
@@ -1111,6 +1119,17 @@ function go(key, updateHistory=true){
 document.addEventListener('click',e=>{
   const g=e.target.closest('[data-go]'); if(g){e.preventDefault();go(g.dataset.go);return;}
   const f=e.target.closest('.faq-q'); if(f){f.parentElement.classList.toggle('open');return;}
+});
+// Robust per-element handler (capture phase) to ensure clicks on [data-go] are handled
+document.querySelectorAll('[data-go]').forEach(el=>{
+  el.addEventListener('click',function(evt){
+    // Skip form submit buttons
+    if(this.tagName && this.tagName.toLowerCase()==='button' && this.type==='submit') return;
+    evt.preventDefault();
+    evt.stopPropagation();
+    const key = this.dataset.go;
+    if(key) go(key);
+  }, {capture:true});
 });
 document.getElementById('burger').addEventListener('click',()=>{
   document.getElementById('mm').classList.toggle('open');

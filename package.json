@@ -5,4 +5,8 @@
   "dependencies": {
     "nodemailer": "^6.9.2"
   }
+  ,
+  "scripts": {
+    "dev": "node dev-server.js 3000"
+  }
 }

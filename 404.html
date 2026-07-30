@@ -13,5 +13,13 @@
     <p>Sorry, we couldn't find that page. Try returning to the homepage.</p>
     <p><a href="/">Return home</a></p>
   </div>
+  <script>
+    (function () {
+      const currentPath = window.location.pathname + window.location.search + window.location.hash;
+      if (currentPath !== '/' && !currentPath.startsWith('/?')) {
+        window.location.replace('/?redirect=' + encodeURIComponent(currentPath));
+      }
+    })();
+  </script>
 </body>
 </html>

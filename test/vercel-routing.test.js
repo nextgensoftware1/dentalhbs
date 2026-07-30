@@ -14,7 +14,7 @@ test('Vercel config should rewrite unknown routes to the SPA entrypoint', () => 
   assert.ok(hasSpaRewrites || hasSpaRoutes, 'Expected a catch-all SPA rewrite or route for unknown paths');
 });
 
-test('404 page should preserve the requested path and redirect to the SPA shell', () => {
-  assert.match(notFoundPage, /location\.pathname|location\.href|window\.location/i);
-  assert.match(notFoundPage, /index\.html|\/call-support|pathname/i);
+test('404 page should preserve the requested path while loading the SPA shell', () => {
+  assert.match(notFoundPage, /fetch\('\/index\.html'\)|history\.replaceState|window\.location\.pathname/i);
+  assert.match(notFoundPage, /index\.html|currentPath|pathname/i);
 });

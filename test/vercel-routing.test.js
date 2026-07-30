@@ -14,6 +14,15 @@ test('Vercel config should rewrite unknown routes to the SPA entrypoint', () => 
   assert.ok(hasSpaRewrites || hasSpaRoutes, 'Expected a catch-all SPA rewrite or route for unknown paths');
 });
 
+test('Known SPA routes should have route-specific entry files to avoid 404 flashes', () => {
+  const routes = ['/call-support', '/insurance-verification', '/rcm-billing', '/admin-support', '/contact'];
+
+  for (const route of routes) {
+    const routeFile = path.join(root, route.replace(/^\//, ''), 'index.html');
+    assert.ok(fs.existsSync(routeFile), `Expected route entry file for ${route}`);
+  }
+});
+
 test('404 page should preserve the requested path while loading the SPA shell', () => {
   assert.match(notFoundPage, /fetch\('\/index\.html'\)|history\.replaceState|window\.location\.pathname/i);
   assert.match(notFoundPage, /index\.html|currentPath|pathname/i);

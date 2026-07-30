@@ -7,6 +7,15 @@ const routes = {
   '/contact': 'contact'
 };
 
+function getInitialRoute() {
+  const params = new URLSearchParams(window.location.search);
+  const redirect = params.get('redirect');
+  if (redirect && redirect.startsWith('/')) {
+    return redirect;
+  }
+  return window.location.pathname;
+}
+
 const sections = {
   home: 'page-dental',
   'call-support': 'page-call-support',
@@ -16,24 +25,9 @@ const sections = {
   contact: 'page-book'
 };
 
-function normalizePathname(pathname) {
-  if (!pathname || pathname === '/') return '/';
-  return pathname.replace(/\/+$/, '') || '/';
-}
-
-function getStoredRoute() {
-  try {
-    const stored = sessionStorage.getItem('spa-route');
-    sessionStorage.removeItem('spa-route');
-    return stored;
-  } catch (error) {
-    return null;
-  }
-}
-
 function setActiveRoute(pathname) {
-  const normalized = normalizePathname(pathname);
-  const key = routes[normalized] ? routes[normalized] : 'home';
+  const normalized = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
+  const key = routes[normalized] || 'home';
   document.querySelectorAll('.page').forEach((page) => page.classList.remove('active'));
   const active = document.getElementById(sections[key]);
   if (active) {
@@ -41,8 +35,7 @@ function setActiveRoute(pathname) {
   }
 
   document.querySelectorAll('[data-nav-link]').forEach((link) => {
-    const linkPath = normalizePathname(link.getAttribute('href'));
-    const isActive = linkPath === normalized || (normalized === '/' && linkPath === '/');
+    const isActive = link.getAttribute('href') === pathname || (pathname === '/' && link.getAttribute('href') === '/');
     link.classList.toggle('active', isActive);
   });
 
@@ -50,7 +43,7 @@ function setActiveRoute(pathname) {
 }
 
 function navigate(pathname) {
-  const normalized = normalizePathname(pathname);
+  const normalized = pathname === '/' ? '/' : pathname.replace(/\/+$/, '');
   if (normalized === window.location.pathname) {
     setActiveRoute(normalized);
     return;
@@ -69,14 +62,15 @@ document.addEventListener('click', (event) => {
 
 window.addEventListener('popstate', () => setActiveRoute(window.location.pathname));
 window.addEventListener('load', () => {
-  const storedRoute = getStoredRoute();
-  const requestedPath = normalizePathname(storedRoute || window.location.pathname);
-  const targetPath = requestedPath === '/' || routes[requestedPath] ? requestedPath : '/';
-
-  if (targetPath !== window.location.pathname) {
-    window.history.replaceState({}, '', targetPath);
+  const initialRoute = getInitialRoute();
+  if (initialRoute !== window.location.pathname) {
+    window.history.replaceState({}, '', initialRoute);
   }
-
-  setActiveRoute(targetPath);
+  setActiveRoute(initialRoute);
 });
-setActiveRoute(window.location.pathname);
+
+const initialRoute = getInitialRoute();
+if (initialRoute !== window.location.pathname) {
+  window.history.replaceState({}, '', initialRoute);
+}
+setActiveRoute(initialRoute);

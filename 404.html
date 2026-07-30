@@ -16,9 +16,21 @@
   <script>
     (function () {
       const currentPath = window.location.pathname + window.location.search + window.location.hash;
-      if (currentPath !== '/' && !currentPath.startsWith('/?')) {
-        window.location.replace('/?redirect=' + encodeURIComponent(currentPath));
+      if (currentPath === '/' || currentPath === '/index.html' || currentPath === '/404.html') {
+        return;
       }
+
+      fetch('/index.html')
+        .then((response) => response.text())
+        .then((html) => {
+          document.open();
+          document.write(html);
+          document.close();
+          window.history.replaceState({}, '', currentPath);
+        })
+        .catch(() => {
+          window.location.replace('/');
+        });
     })();
   </script>
 </body>

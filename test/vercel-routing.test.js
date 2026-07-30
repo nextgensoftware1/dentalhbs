@@ -14,6 +14,12 @@ test('Vercel config should rewrite unknown routes to the SPA entrypoint', () => 
   assert.ok(hasSpaRewrites || hasSpaRoutes, 'Expected a catch-all SPA rewrite or route for unknown paths');
 });
 
+test('The app shell should normalize trailing slashes for deep-link refreshes', () => {
+  const indexHtml = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  assert.match(indexHtml, /normalizePath\(|pathname\.replace\(/i);
+  assert.match(indexHtml, /routePages\[.*window\.location\.pathname|routePages\[.*initialPath/i);
+});
+
 test('Known SPA routes should have route-specific entry files to avoid 404 flashes', () => {
   const routes = ['/call-support', '/insurance-verification', '/rcm-billing', '/admin-support', '/contact'];
 

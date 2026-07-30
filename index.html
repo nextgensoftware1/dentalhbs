@@ -1082,6 +1082,10 @@ document.getElementById('root').innerHTML=shell();
 
 const pages={dental:'page-dental','call-support':'page-call-support','insurance-verification':'page-insurance-verification','rcm-billing':'page-rcm-billing','admin-support':'page-admin-support','book':'page-book'};
 const routePages={'/':'dental','/call-support':'call-support','/insurance-verification':'insurance-verification','/rcm-billing':'rcm-billing','/admin-support':'admin-support','/contact':'book'};
+function normalizePath(pathname){
+  if(!pathname || pathname === '/') return '/';
+  return pathname.replace(/\/+$/, '') || '/';
+}
 let io;
 function observe(){
   if(io)io.disconnect();
@@ -1133,8 +1137,12 @@ document.getElementById('burger').addEventListener('click',()=>{
   document.getElementById('mm').classList.toggle('open');
   document.getElementById('burger').classList.toggle('open');
 });
-window.addEventListener('popstate',()=>go(routePages[window.location.pathname]||'dental',false));
-go(routePages[window.location.pathname]||'dental',false);
+window.addEventListener('popstate',()=>{
+  const path = normalizePath(window.location.pathname);
+  go(routePages[path]||'dental',false);
+});
+const initialPath = normalizePath(window.location.pathname);
+go(routePages[initialPath]||'dental',false);
 
 </script>
 </body>

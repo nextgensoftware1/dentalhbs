@@ -7,7 +7,18 @@
 </head>
 <body>
   <script>
-    window.location.replace('/');
+    const currentPath = window.location.pathname + window.location.search + window.location.hash;
+    fetch('/index.html')
+      .then((response) => response.text())
+      .then((html) => {
+        document.open();
+        document.write(html);
+        document.close();
+        window.history.replaceState({}, '', currentPath);
+      })
+      .catch(() => {
+        window.location.reload();
+      });
   </script>
 </body>
 </html>

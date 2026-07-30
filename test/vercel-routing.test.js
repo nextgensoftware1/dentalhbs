@@ -29,6 +29,22 @@ test('Known SPA routes should have route-specific entry files to avoid 404 flash
   }
 });
 
+test('Deep-link route files should preserve the current path instead of redirecting to home', () => {
+  const routeFiles = [
+    path.join(root, 'call-support.html'),
+    path.join(root, 'insurance-verification.html'),
+    path.join(root, 'rcm-billing.html'),
+    path.join(root, 'admin-support.html'),
+    path.join(root, 'contact.html')
+  ];
+
+  for (const file of routeFiles) {
+    const content = fs.readFileSync(file, 'utf8');
+    assert.match(content, /history\.replaceState|fetch\('\/index\.html'\)/i);
+    assert.doesNotMatch(content, /location\.replace\('\/'\)/i);
+  }
+});
+
 test('404 page should preserve the requested path while loading the SPA shell', () => {
   assert.match(notFoundPage, /fetch\('\/index\.html'\)|history\.replaceState|window\.location\.pathname/i);
   assert.match(notFoundPage, /index\.html|currentPath|pathname/i);

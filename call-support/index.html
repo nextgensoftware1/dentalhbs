@@ -299,6 +299,8 @@ h1,h2,h3{font-family:var(--disp);font-weight:500;line-height:1.08;letter-spacing
 /* ============ RESPONSIVE ============ */
 @media(max-width:940px){
   .nav-links,.back-hbs,.nav-home{display:none}
+  .nav-cta{display:none}
+  .mobile-menu-open .nav-cta{display:inline-flex}
   .burger{display:flex}
   .mobile-menu{display:block;position:fixed;inset:78px 0 auto 0;background:rgba(255,255,255,.97);backdrop-filter:blur(14px);border-bottom:1px solid var(--line);padding:1rem 16px 1.3rem;transform:translateY(-120%);transition:transform .3s ease,box-shadow .3s ease;z-index:55;box-shadow:0 12px 30px -16px rgba(14,76,72,.2)}
   .mobile-menu.open{transform:translateY(0)}
@@ -1040,7 +1042,7 @@ function shell(){
   </div></nav>
     <div class="mobile-menu" id="mm">
       ${NAV.map(([k,l])=>`<a href="${routePath(k)}" data-nav-link data-go="${k}">${l}</a>`).join('')}
-      <a class="mm-cta" data-go="book" href="/contact">Book a dental support call</a>
+      <a class="mm-cta" data-go="book" href="/contact" role="button" aria-label="Book a call">Book a call</a>
       <a class="mm-back" href="https://www.hiredbillingsupport.com" target="_blank" style="display:block;padding-top:1rem">↖ Back to HBS main site</a>
     </div>
 
@@ -1129,10 +1131,27 @@ document.querySelectorAll('[data-go]').forEach(el=>{
     if(key) go(key);
   }, {capture:true});
 });
-document.getElementById('burger').addEventListener('click',()=>{
-  document.getElementById('mm').classList.toggle('open');
-  document.getElementById('burger').classList.toggle('open');
+const burger = document.getElementById('burger');
+const mobileMenu = document.getElementById('mm');
+function closeMobileMenu(){
+  mobileMenu.classList.remove('open');
+  burger.classList.remove('open');
+  document.body.classList.remove('mobile-menu-open');
+}
+burger.addEventListener('click',()=>{
+  const isOpen = mobileMenu.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  document.body.classList.toggle('mobile-menu-open', isOpen);
 });
+window.addEventListener('scroll', ()=> {
+  if (mobileMenu.classList.contains('open')) closeMobileMenu();
+}, { passive: true });
+window.addEventListener('wheel', ()=> {
+  if (mobileMenu.classList.contains('open')) closeMobileMenu();
+}, { passive: true });
+window.addEventListener('touchmove', ()=> {
+  if (mobileMenu.classList.contains('open')) closeMobileMenu();
+}, { passive: true });
 window.addEventListener('popstate',()=>go(routePages[window.location.pathname]||'dental',false));
 go(routePages[window.location.pathname]||'dental',false);
 
